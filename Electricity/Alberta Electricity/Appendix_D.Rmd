@@ -1,0 +1,1475 @@
+---
+title: "R Code - Appendix D"
+author: "Ben Motil"
+date: "March 23, 2018"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Import Data
+
+```{r}
+if (Sys.getenv('computername') == "DESKTOP-HOKP1GT"){
+  load('C:/users/benmo/OneDrive/GitHub/DataPlayground/R/electricity.RData')
+} else {
+  load('D:/benmo/OneDrive/GitHub/DataPlayground/R/electricity.RData')
+}
+
+
+summary(aeso)
+```
+
+## Import Packages
+
+
+```{r, message=FALSE, warning=FALSE, results='hide'}
+lapply(list('dplyr','xts', 'rugarch', 'rmgarch', 
+            'ggplot2', 'MTS', 'dlm', 'forecast',
+            'xtable', 'broom','urca','sgt','fGarch',
+            'lmtest'), require, character.only = TRUE)
+```
+
+
+## Add Dummies/External Regressors
+
+```{r}
+#add month dummy
+#aeso <- transform(aeso,monthNum=as.numeric(factor(format(as.POSIXct(rownames(aeso)),"%m"))))
+
+#add hour dummy
+#aeso <- transform(aeso,hourNum=as.numeric(factor(format(as.POSIXct(rownames(aeso)),"%H"))))
+
+#add weekend dummy
+aeso$isWkd <- weekdays(as.POSIXct(rownames(aeso))) %in% c("Friday", "Saturday", "Sunday") == TRUE
+aeso$isWkd <- ifelse(aeso$isWkd,1,0)
+
+aeso$Actual.Posted.Pool.Price[aeso$Actual.Posted.Pool.Price < 0.1] = 0.1
+
+
+
+x <- msts(aeso$Actual.Posted.Pool.Price, seasonal.periods=c(24, 168, 8760))
+#x <- msts(log(aeso$Actual.Posted.Pool.Price), seasonal.periods=c(24, 168, 8760))
+
+fourier_x <- fourier(x, K = c(10,30,10))
+
+aeso <- cbind(aeso, fourier_x)
+
+aeso_ts <- na.omit(xts(aeso, as.POSIXct(row.names(aeso))))
+colnames(aeso_ts) <- c(c('Actual.MW','Actual.Price','Forecast.Price','Forecast.MW','Renewables.MW','isWkd'),colnames(aeso[,7:ncol(aeso)]))
+
+
+aeso_ts$prod0 <- 0
+aeso_ts$prod0['2015-04-01::2015-12-15'] <- 1 
+
+aeso_ts$prod1 <- 0
+aeso_ts$prod1['2015-12-15::2016-06-15'] <- 1 
+
+
+prod <- Arima(aeso_ts$Renewables.MW, order=c(8,0,7), xreg=aeso_ts[,c(7:12,25:ncol(aeso_ts))])
+
+bob <- tidy(fitted(prod, h=1))
+prod_ts <- aeso_ts$Renewables.MW
+jim <- tidy(prod_ts)
+jim[,'test'] = bob$x
+test1 <- na.omit(xts(jim[,c(3,4)], as.POSIXct(jim$index)))
+plot.xts(test1)
+
+#DAY of WEEK DUMMIES
+#doW<- model.matrix(~factor(weekdays(as.POSIXct(rownames(aeso)))))[,-c(1)]
+#aeso <- cbind(aeso, doW)
+
+var24 <- rollapply(aeso_ts$Renewables.MW, 24, var)
+var12 <- rollapply(aeso_ts$Renewables.MW, 12, var)
+var6 <- rollapply(aeso_ts$Renewables.MW, 6, var)
+
+#bob <- aeso[aeso$h02 == 1,]
+
+
+#x <- msts(aeso$Actual.Posted.Pool.Price, seasonal.periods=c(24, 168))
+#taylor.lm <- tslm(x ~ fourier(x, K = c(10,10))) 
+#taylor.fcast <- forecast(taylor.lm, data.frame(fourier(x, K = c(4, 4), h = 1))) 
+#bob <- tidy(taylor.fcast$model$residuals)
+#aeso[,'test']  <- bob$x
+
+#h2 <- aeso_ts[aeso_ts$h02 == 1,]
+#weekly <- h2$Actual.Posted.Pool.Price
+#plot(decompose(ts(weekly, frequency=7)))
+
+
+
+
+
+#jim <- arima(aeso_ts$Actual.Posted.Pool.Price, order=c(1,0,1), xreg=aeso_ts[,6:ncol(aeso_ts)])
+
+
+
+#___________COEFFICENTS CAN BE INTERPRETED AS THE EFFECT RELATIVE TO MIDNIGHT & JANUARY_____________
+
+#mD <- model.matrix(~factor(aeso$monthNum))[,-c(1)]  # remove  first month
+#dD <- model.matrix(~factor(aeso$hourNum))[,-c(1)]   # remove  twelfth hour
+
+#aeso <- cbind(cbind(aeso, mD),dD)
+#aeso <- cbind(aeso, fourier_x)
+
+#colnames(aeso) <- c(colnames(aeso[,1:8]),lapply(colnames(aeso[,9:19]), function(x) `substr<-`(
+  #gsub(')','0', substr(x,nchar(x)-2,nchar(x))), 1,1,'m')),
+  #lapply(colnames(aeso[,20:ncol(aeso)]), function(x) `substr<-`(
+  #gsub(')','0', substr(x,nchar(x)-2,nchar(x))), 1,1,'h'))) # rename dummy columns
+ 
+
+#blah <- spectrum(aeso_ts$Actual.Price)
+#plot(blah$freq[1:2000],blah$spec[1:2000])
+#1.2e-5*60*60*24
+
+#plot(blah$freq[2000:7000],blah$spec[2000:7000])
+#8e-5*60*60*24
+
+```
+
+
+## Expected vs unexpected
+
+```{r}
+
+aeso2_ts <- aeso_ts[,c(1,3,6:28)]
+colnames(aeso2_ts) <- c('unPred.MW', 'unPred.Wind',
+                        colnames(aeso_ts[,6:28]))
+
+
+temp <- tidy(fitted(prod, h=1))
+Act.Wind <- aeso_ts$Renewables.MW
+temp1 <- tidy(Act.Wind)
+temp1[,'Pred.Wind'] = temp$x
+temp <- xts(temp1[,c(3,4)], as.POSIXct(temp1$index))
+
+
+aeso2_ts$unPred.Wind <- temp$value - temp$Pred.Wind
+aeso2_ts$Pred.Wind <- temp$Pred.Wind
+
+aeso2_ts$unPred.MW <- aeso_ts$Actual.MW - aeso_ts$Forecast.MW
+aeso2_ts$Pred.MW <- aeso_ts$Forecast.MW
+
+aeso2_ts$Actual.Price <- aeso_ts$Actual.Price
+
+```
+
+
+## Convert to Time-Series Object
+
+
+```{r, echo=FALSE}
+#aeso_ts <- na.omit(xts(aeso[,-c(6,7)], as.POSIXct(row.names(aeso))))
+aeso_ts <- na.omit(xts(aeso, as.POSIXct(row.names(aeso))))
+colnames(aeso_ts) <- c(c('Actual.MW','Actual.Price','Forecast.Price','Forecast.MW','Renewables.MW','isWkd'),colnames(aeso[,7:ncol(aeso)]))
+
+
+#____________CREATE DUMMIES FOR WIND PRODUCTION REGIMES_____________
+aeso_ts$prod0 <- 0
+aeso_ts$prod0['2015-04-01::2015-12-15'] <- 1 
+
+aeso_ts$prod1 <- 0
+aeso_ts$prod1['2015-12-15::2016-06-15'] <- 1 
+
+
+
+```
+
+* Price is > $0.01 and < $769, 99.5% of the time 
+
+
+```{r}
+quantile.zoo(aeso_ts$Actual.Price,c(0.0025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.9975))
+```
+
+```{r, fig.width = 6.5, fig.height = 3.5}
+
+plot.xts(aeso_ts$Actual.Price)
+
+aeso_ts$Actual.Price[aeso_ts$Actual.Price < 0.1] = 0.1
+aeso$Actual.Posted.Pool.Price[aeso$Actual.Posted.Pool.Price < 0.1] = 0.1
+
+```
+
+## Daily Seasonality
+
+```{r, fig.width = 6.5, fig.height = 6}
+par(mfrow=c(4,1))
+logprice <- list()
+dates <- list(NaN, NaN, NaN)
+names(dates) <- c("daily", "weekly", "monthly")
+dates <- lapply(dates, function(x) list(NaN, NaN, NaN))
+dates <- lapply(dates, function(x) lapply(x, function(x1) list(NaN, NaN, NaN, NaN)))
+dates <- lapply(dates, function(x,y) `names<-`(x,y), y=c('y','m','d'))
+
+
+for(i in 1:4){
+  dates$daily$y[[i]] <- sample(16:17,1)
+  dates$daily$m[[i]] <- sample(1:9,1)
+  dates$daily$d[[i]] <- sample(10:20,1)
+  y <- dates$daily$y[[i]]
+  m <- dates$daily$m[[i]]
+  d <- dates$daily$d[[i]]
+  
+  logprice[[i]] <- log(aeso_ts$Actual.Price[sprintf('20%i-0%i-%i::20%i-0%i-%i',y,m,d,y,m,d+6)]) 
+}
+
+plot.xts(logprice[[1]],major.ticks=d)
+plot.xts(logprice[[2]],major.ticks=d)
+plot.xts(logprice[[3]],major.ticks=d)
+plot.xts(logprice[[4]],major.ticks=d)
+```
+
+## Weekly Seasonality
+
+```{r, fig.width = 6.5, fig.height = 6}
+
+par(mfrow=c(4,1))
+
+for(i in 1:4){
+  dates$weekly$y[[i]] <- sample(16:17,1)
+  dates$weekly$m[[i]] <- sample(1:9,1)
+  dates$weekly$d[[i]] <- sample(10:20,1)
+  
+  y <- dates$weekly$y[[i]]
+  m <- dates$weekly$m[[i]]
+  d <- dates$weekly$d[[i]]
+  
+  logprice[[i]] <- log(aeso_ts$Actual.Price[sprintf('20%i-0%i:',y,m)]) 
+}
+
+plot.xts(logprice[[1]],major.ticks=d)
+plot.xts(logprice[[2]],major.ticks=d)
+plot.xts(logprice[[3]],major.ticks=d)
+plot.xts(logprice[[4]],major.ticks=d)
+```
+
+## Monthly Seasonality
+
+```{r, fig.width = 6.5, fig.height = 6}
+par(mfrow=c(2,1))
+
+
+  
+logprice[[1]] <- log(aeso_ts$Actual.Price['2016']) 
+logprice[[2]] <- log(aeso_ts$Actual.Price['2017']) 
+
+plot.xts(logprice[[1]],major.ticks=d)
+plot.xts(logprice[[2]],major.ticks=d)
+
+```
+
+### Check if Seasonality remains
+
+```{r, fig.width = 6.5, fig.height = 3.5}
+
+pred_aeso <- lm(log(Actual.Posted.Pool.Price) ~ factor(monthNum) + isWkd + factor(hourNum), data=aeso)
+resids <- na.omit(xts(pred_aeso$residuals, as.POSIXct(row.names(aeso))))
+
+aeso <- aeso[,-c(6,7)]        # Remove hour & month columns (already created dummies)
+
+summary(pred_aeso)
+
+plot.xts(resids, major.ticks = 'm')
+
+
+```
+
+### Check Daily Seasonality
+
+```{r, fig.width = 6.5, fig.height = 6}
+
+par(mfrow=c(4,1))
+residtest <- list()
+
+for(i in 1:4){
+
+  y <- dates$daily$y[[i]]
+  m <- dates$daily$m[[i]]
+  d <- dates$daily$d[[i]]
+  
+  residtest[[i]] <- resids[sprintf('20%i-0%i-%i::20%i-0%i-%i',y,m,d,y,m,d+6)] 
+}
+
+plot.xts(residtest[[1]],major.ticks=d)
+plot.xts(residtest[[2]],major.ticks=d)
+plot.xts(residtest[[3]],major.ticks=d)
+plot.xts(residtest[[4]],major.ticks=d)
+
+
+
+```
+### Check Weekly Seasonality
+
+```{r, fig.width = 6.5, fig.height = 6}
+
+par(mfrow=c(4,1))
+residtest <- list()
+
+for(i in 1:4){
+
+  y <- dates$weekly$y[[i]]
+  m <- dates$weekly$m[[i]]
+  d <- dates$weekly$d[[i]]
+  
+  residtest[[i]] <- resids[sprintf('20%i-0%i:',y,m)] 
+}
+
+plot.xts(residtest[[1]],major.ticks=d)
+plot.xts(residtest[[2]],major.ticks=d)
+plot.xts(residtest[[3]],major.ticks=d)
+plot.xts(residtest[[4]],major.ticks=d)
+
+```
+
+### Check Monthly Seasonality
+
+```{r, fig.width = 6.5, fig.height = 6}
+
+par(mfrow=c(2,1))
+residtest <- list()
+
+
+residtest[[1]] <- resids['2016'] 
+residtest[[2]] <- resids['2017'] 
+
+plot.xts(residtest[[1]],major.ticks=m)
+plot.xts(residtest[[2]],major.ticks=m)
+
+
+```
+
+```{r}
+
+plot.xts(aeso_ts$Renewables.MW)
+
+
+```
+
+```{r}
+aeso_ts$Renewables.Pct <- aeso_ts$Renewables.MW/aeso_ts$Actual.MW
+
+par(mfrow=c(3,1))
+
+plot.xts(log(aeso_ts$Actual.Price)) 
+plot.xts(aeso_ts$Actual.MW) 
+plot.xts(aeso_ts$Renewables.Pct)
+
+```
+
+```{r}
+
+dailyvol <- period.apply(aeso_ts$Renewables.Pct,INDEX=endpoints(aeso_ts$Renewables.Pct,'days'), FUN=function(x) var(x))
+
+plot.xts(sqrt(dailyvol),major.ticks=d)
+
+```
+
+```{r}
+
+#check inverse gaussian or "sstd"
+
+
+spec = ugarchspec(variance.model = list(model = "eGARCH", 
+                                        garchOrder = c(1,1),
+                                        external.regressors = aeso_ts[,c(1,5:ncol(aeso_ts))-1], 
+                                        variance.targeting = FALSE),
+                  mean.model = list(armaOrder = c(2,1), 
+                                    include.mean = TRUE,
+                                    archm = TRUE, archpow = 1, 
+                                    arfima = FALSE, external.regressors = aeso_ts[,c(1,5:ncol(aeso_ts))-1],
+                                    archex = FALSE), 
+                  distribution.model = "norm") #use start.pars = list() if trouble converging
+
+
+#fit1 = ugarchfit(data = log(aeso_ts$Actual.Price), spec = spec)
+
+#qplot(fit1@fit$residuals[(fit1@fit$residuals > -2) & (fit1@fit$residuals < 2)], geom='histogram')
+
+
+#Thedistributiondensitytousefortheinnovations. Validchoicesare"norm"for the normal distibution, "snorm" for the skew-normal distribution, "std" for the student-t, "sstd" for the skew-student-t, "ged" for the generalized error distribution, "sged" for the skew-generalized error distribution, "nig" for the normal inverse gaussian distribution, "ghyp" for the Generalized Hyperbolic, and "jsu" for Johnson's SU distribution
+
+
+
+```
+
+```{r}
+
+#show(fit1)
+
+```
+```{r}
+
+
+#res <- ur.df(resids, type = c("trend"),lags=48,selectlags = c("AIC"))
+
+#summary(res)
+
+
+```
+
+```{r}
+
+
+#ar_aic = ar.ols(resids,order.max = 100)$aic
+#qplot(1:length(ar_aic), y=ar_aic) # lag order of 25 chosen
+
+```
+
+```{r}
+
+
+Price.mdl_ts <- aeso_ts
+Price.mdl_ts$Var.Wind <- var24
+
+Price.mdl_ts <- na.omit(Price.mdl_ts)
+
+
+#______________________________SPECIFY MODEL FOR RENEWABLE PRODUCTION__________________________________
+
+mdls <- list("sGARCH", "eGARCH")
+ordGARCH <- list(c(1,1)) #,c(1,2),c(2,1)
+names(ordGARCH) <- c('garch11') #,'garch12','garch21'
+ordARMA <- list(c(8,7)) #,c(25,0)
+
+spec = list()
+
+for (i in 1:length(mdls)){
+  spec[[i]] <- list()
+  for (j in 1:length(ordGARCH)){
+    spec[[i]][[j]] <- list()
+    
+    for (k in 1:length(ordARMA)){
+      spec[[i]][[j]][[k]] <- ugarchspec(variance.model = list(model = mdls[[i]], 
+                                          garchOrder = ordGARCH[[j]],
+                                          variance.targeting = FALSE),
+                    mean.model = list(armaOrder = ordARMA[[k]], 
+                                      include.mean = TRUE,
+                                      archm = TRUE, archpow = 1, #incl. ARCH (wind turbines might need t to speed up)
+                                      arfima = FALSE, external.regressors = aeso_ts[,c(7:12,25:ncol(aeso_ts))], 
+                                      archex = FALSE), 
+                    distribution.model = "norm")
+    }
+  }
+}
+
+names(spec) <- c("sGARCH", "eGARCH")
+
+
+
+#_____________________________________SPECIFY MODEL FOR PRICE__________________________________________
+specPrice = ugarchspec(variance.model = list(model = "eGARCH", 
+                                        garchOrder = c(1,1),
+                                        external.regressors = aeso_ts[,c(1,5:ncol(aeso_ts))], 
+                                        variance.targeting = FALSE),
+                  mean.model = list(armaOrder = c(25,0), 
+                                    include.mean = TRUE,
+                                    archm = TRUE, archpow = 1, 
+                                    arfima = FALSE, external.regressors = aeso_ts[,c(1,5)], archex = FALSE), 
+                  distribution.model = "norm",
+                  start.pars = as.list(coef(estPars)),
+                  solver.control = list(DELTA = 1e-6,MAXIT = 1200,TOL = 1e-5)) 
+
+
+
+
+mdls <- list("sGARCH", "eGARCH")
+ordGARCH <- list(c(1,1)) #,c(1,2),c(2,1)
+names(ordGARCH) <- c('garch11') #,'garch12','garch21'
+ordARMA <- c(9,8) #,c(25,0)
+errs <- c("norm","nig","jsu")
+
+specPrice = list()
+
+for (i in 1:length(mdls)){
+  specPrice[[i]] <- list()
+  for (j in 1:length(ordGARCH)){
+    specPrice[[i]][[j]] <- list()
+    
+    for (k in 1:length(errs)){
+      specPrice[[i]][[j]][[k]] <- ugarchspec(variance.model = list(model = mdls[[i]],
+                                          garchOrder = ordGARCH[[j]],
+                                          external.regressors = Price.mdl_ts[,c(1,5,ncol(Price.mdl_ts))],
+                                          variance.targeting = FALSE),
+                    mean.model = list(armaOrder = ordARMA, 
+                                      include.mean = TRUE,
+                                      archm = TRUE, archpow = 1, #incl. ARCH (wind turbines might need t to speed up)
+                                      arfima = FALSE, external.regressors = Price.mdl_ts[,c(1,5:(ncol(Price.mdl_ts)-3),
+                                                                                            ncol(Price.mdl_ts))], 
+                                      archex = FALSE), 
+                    distribution.model = errs[k])
+    }
+  }
+}
+
+names(specPrice) <- c("sGARCH", "eGARCH")
+
+fitProd <- spec
+
+for (i in 1:length(mdls)){
+  for (j in 1:length(ordGARCH)){
+    for (k in 1:length(ordARMA)){
+      fitProd[[i]][[j]][[k]] <- tryCatch(
+                                    ugarchfit(data = aeso_ts$Renewables.MW, 
+                                          spec = spec[[i]][[j]][[k]], solver = 'hybrid'),
+                                    error=function(cond) NaN)
+    }
+  }
+}
+
+
+fitPrice <- specPrice
+
+
+for (i in 1:length(mdls)){
+  for (j in 1:length(ordGARCH)){
+    for (k in 1:length(ordARMA)){
+      fitPrice[[i]][[j]][[k]]  <- tryCatch(
+                                    ugarchfit(data = log(Price.mdl_ts$Actual.Price), 
+                                              spec = specPrice[[i]][[j]][[k]], solver = 'hybrid'),
+                                    error=function(cond) NaN)
+    }
+  }
+}
+
+#fitProd = ugarchfit(data = aeso_ts$Actual.Renewables.MW, spec = spec)
+#fit1 = ugarchfit(data = log(aeso_ts$Actual.Price), spec = spec)
+
+#solver = "solnp", solver.control = list(DELTA = 1e-6,MAXIT = 1200,TOL = 1e-6)
+```
+# Fit variance models to production
+
+```{r}
+
+mdls <- list("sGARCH", "eGARCH")
+ordGARCH <- list(c(1,1)) #,c(1,2),c(2,1)
+names(ordGARCH) <- c('garch11') #,'garch12','garch21'
+ordARMA <- list(c(8,7)) #,c(25,0)
+
+spec = list()
+
+for (i in 1:length(mdls)){
+  spec[[i]] <- list()
+  for (j in 1:length(ordGARCH)){
+    spec[[i]][[j]] <- list()
+    
+    for (k in 1:length(ordARMA)){
+      spec[[i]][[j]][[k]] <- ugarchspec(variance.model = list(model = mdls[[i]], 
+                                          garchOrder = ordGARCH[[j]],
+                                          variance.targeting = FALSE),
+                    mean.model = list(armaOrder = ordARMA[[k]], 
+                                      include.mean = TRUE,
+                                      archm = TRUE, archpow = 1, #incl. ARCH (wind turbines might need t to speed up)
+                                      arfima = FALSE, external.regressors = aeso_ts[,c(7:12,25:ncol(aeso_ts))], 
+                                      archex = FALSE), 
+                    distribution.model = "norm")
+    }
+  }
+}
+
+names(spec) <- c("sGARCH", "eGARCH")
+
+
+fitProd <- spec
+
+for (i in 1:length(mdls)){
+  for (j in 1:length(ordGARCH)){
+    for (k in 1:length(ordARMA)){
+      fitProd[[i]][[j]][[k]] <- tryCatch(
+                                    ugarchfit(data = aeso_ts$Renewables.MW, 
+                                          spec = spec[[i]][[j]][[k]], solver = 'hybrid'),
+                                    error=function(cond) NaN)
+    }
+  }
+}
+
+
+```
+
+
+
+#Fit price model
+
+```{r}
+
+
+Price.mdl_ts <- aeso_ts
+Price.mdl_ts$Var.Wind <- var24
+
+Price.mdl_ts <- na.omit(Price.mdl_ts)
+
+mdls <- list("sGARCH", "eGARCH")
+ordGARCH <- list(c(1,1)) #,c(1,2),c(2,1)
+names(ordGARCH) <- c('garch11') #,'garch12','garch21'
+ordARMA <- c(9,8) #,c(25,0)
+errs <- c("norm","nig","jsu")
+
+specPrice = list()
+
+for (i in 1:length(mdls)){
+  specPrice[[i]] <- list()
+  for (j in 1:length(ordGARCH)){
+    specPrice[[i]][[j]] <- list()
+    
+    for (k in 1:length(errs)){
+      specPrice[[i]][[j]][[k]] <- ugarchspec(variance.model = list(model = mdls[[i]],
+                                          garchOrder = ordGARCH[[j]],
+                                          external.regressors = Price.mdl_ts[,c(1,5,ncol(Price.mdl_ts))],
+                                          variance.targeting = FALSE),
+                    mean.model = list(armaOrder = ordARMA, 
+                                      include.mean = TRUE,
+                                      archm = TRUE, archpow = 1, #incl. ARCH (wind turbines might need t to speed up)
+                                      arfima = FALSE, external.regressors = Price.mdl_ts[,c(1,5:(ncol(Price.mdl_ts)-3),
+                                                                                            ncol(Price.mdl_ts))], 
+                                      archex = FALSE), 
+                    distribution.model = errs[k])
+    }
+  }
+}
+
+names(specPrice) <- c("sGARCH", "eGARCH")
+
+
+fitPrice <- specPrice
+
+
+for (i in 1:length(mdls)){
+  for (j in 1:length(ordGARCH)){
+    for (k in 1:length(ordARMA)){
+      fitPrice[[i]][[j]][[k]]  <- tryCatch(
+                                    ugarchfit(data = log(Price.mdl_ts$Actual.Price), 
+                                              spec = specPrice[[i]][[j]][[k]], solver = 'hybrid'),
+                                    error=function(cond) NaN)
+    }
+  }
+}
+
+
+```
+
+```{r}
+
+
+par(mfrow=c(2,1))
+
+plot.xts(log(aeso_ts$Renewables.MW)) 
+plot.xts(aeso_ts$Actual.MW)
+
+```
+```{r}
+
+pred_prod <- lm(log(Renewables.MW) ~ prod0 + prod1, data=aeso_ts)
+
+prod_resids <- pred_prod$residuals
+
+plot(prod_resids)
+
+```
+
+```{r}
+
+#_____________________________________SPECIFY MODEL FOR EXP/UNEXP__________________________________________
+spec = ugarchspec(variance.model = list(model = "sGARCH", 
+                                        garchOrder = c(1,1),
+                                        external.regressors = aeso2_ts[,c(27,2)], 
+                                        variance.targeting = FALSE),
+                  mean.model = list(armaOrder = c(9,8), 
+                                    include.mean = TRUE,
+                                    archm = TRUE, archpow = 1, 
+                                    arfima = FALSE, external.regressors = aeso2_ts[,-c(ncol(aeso2_ts))], archex = FALSE), 
+                  distribution.model = "norm") 
+
+
+```
+
+```{r}
+
+fitLevels <- ugarchfit(data = aeso2_ts$Actual.Price, spec = spec, solver = 'hybrid')
+fitLogs <- ugarchfit(data = log(aeso2_ts$Actual.Price), spec = spec, solver = 'hybrid')
+
+```
+
+#E-GARCH
+
+```{r}
+
+xregs <- aeso2_ts[,c(27,2)]
+xregs[,2] <- abs(xregs[,2])
+
+#_____________________________________SPECIFY MODEL FOR EXP/UNEXP__________________________________________
+spec = ugarchspec(variance.model = list(model = "eGARCH", 
+                                        garchOrder = c(1,1),
+                                        external.regressors = aeso2_ts[,c(27,2)], 
+                                        variance.targeting = FALSE),
+                  mean.model = list(armaOrder = c(9,8), 
+                                    include.mean = TRUE,
+                                    archm = TRUE, archpow = 1, 
+                                    arfima = FALSE, external.regressors = aeso2_ts[,-c(ncol(aeso2_ts))], archex = FALSE), 
+                  distribution.model = "norm") 
+
+
+
+efitLogs <- ugarchfit(data = log(aeso2_ts$Actual.Price), spec = spec, solver = 'hybrid')
+
+```
+
+```{r}
+
+mdls <- list("sGARCH", "eGARCH")
+ordGARCH <- list(c(1,1)) #,c(1,2),c(2,1)
+names(ordGARCH) <- c('garch11') #,'garch12','garch21'
+ordARMA <- list(c(8,0)) #,c(25,0)
+
+spec = list()
+
+for (i in 1:length(mdls)){
+  spec[[i]] <- list()
+  for (j in 1:length(ordGARCH)){
+    spec[[i]][[j]] <- list()
+    
+    for (k in 1:length(ordARMA)){
+      spec[[i]][[j]][[k]] <- ugarchspec(variance.model = list(model = mdls[[i]], 
+                                          garchOrder = ordGARCH[[j]],
+                                          variance.targeting = FALSE),
+                    mean.model = list(armaOrder = ordARMA[[k]], 
+                                      include.mean = TRUE,
+                                      archm = TRUE, archpow = 1, #incl. ARCH (wind turbines might need t to speed up)
+                                      arfima = FALSE, external.regressors = aeso_ts[2:nrow(aeso_ts),c(7:12,25:ncol(aeso_ts))], 
+                                      archex = FALSE), 
+                    distribution.model = "norm")
+    }
+  }
+}
+
+names(spec) <- c("sGARCH", "eGARCH")
+
+
+fitProd <- spec
+
+for (i in 1:length(mdls)){
+  for (j in 1:length(ordGARCH)){
+    for (k in 1:length(ordARMA)){
+      fitProd[[i]][[j]][[k]] <- tryCatch(
+                                    ugarchfit(data = na.omit(diff(aeso_ts$Renewables.MW)), 
+                                          spec = spec[[i]][[j]][[k]], solver = 'hybrid'),
+                                    error=function(cond) NaN)
+    }
+  }
+}
+
+Price.mdl_ts <- aeso_ts
+
+get_spec <- function(varx){
+    
+    Price.mdl_ts$Var.Wind <- varx
+    Price.mdl_ts <- na.omit(Price.mdl_ts)
+    
+    
+    mdls <- list("sGARCH", "eGARCH")
+    ordGARCH <- list(c(1,1)) #,c(1,2),c(2,1)
+    names(ordGARCH) <- c('garch11') #,'garch12','garch21'
+    ordARMA <- c(9,8) #,c(25,0)
+    errs <- c("norm","nig","jsu")
+
+    specPrice = list()
+
+    for (i in 1:length(mdls)){
+      specPrice[[i]] <- list()
+      for (j in 1:length(ordGARCH)){
+        specPrice[[i]][[j]] <- list()
+
+        for (k in 1:length(errs)){
+          specPrice[[i]][[j]][[k]] <- ugarchspec(variance.model = list(model = mdls[[i]],
+                                              garchOrder = ordGARCH[[j]],
+                                              external.regressors = Price.mdl_ts[,c(1,5,ncol(Price.mdl_ts))],
+                                              variance.targeting = FALSE),
+                        mean.model = list(armaOrder = ordARMA, 
+                                          include.mean = TRUE,
+                                          archm = TRUE, archpow = 1, #incl. ARCH (wind turbines might need t to speed up)
+                                          arfima = FALSE, external.regressors = Price.mdl_ts[,c(1,5:(ncol(Price.mdl_ts)-3),
+                                                                                                ncol(Price.mdl_ts))], 
+                                          archex = FALSE), 
+                        distribution.model = errs[k])
+        }
+      }
+    }
+
+    names(specPrice) <- c("sGARCH", "eGARCH")
+
+    return(specPrice) 
+}
+
+
+get_fit <- function(specx, pModel){
+    
+    fitPrice <- specx
+    
+    for (i in 1:length(mdls)){
+      for (j in 1:length(ordGARCH)){
+        for (k in 1:length(errs)){
+              fitPrice[[i]][[j]][[k]]  <- tryCatch(
+                                    ugarchfit(data = log(pModel$Actual.Price), 
+                                              spec = specx[[i]][[j]][[k]], solver = 'hybrid'),
+                                    error=function(cond) NaN)
+        }
+      }
+    }
+    return(fitPrice)
+}
+
+var12 <- rollapply(aeso_ts$Renewables.MW, 12, var)
+var6 <- rollapply(aeso_ts$Renewables.MW, 6, var)
+
+prodMdl <- fitProd[[1]][[1]][[1]]
+
+Price.mdl_ts <- aeso_ts
+Price.mdl_ts$Var.Wind <- prodMdl@fit$sigma
+Price.mdl_ts <- na.omit(Price.mdl_ts)
+specPrice1 <- get_spec(Price.mdl_ts$Var.Wind)
+
+
+errs <- c("norm","nig","jsu")
+
+
+fitPrice1 <- get_fit(specPrice1, Price.mdl_ts)
+
+
+```
+```{r}
+
+
+par(mfrow=c(2,2))
+plot.xts(aeso_ts$Actual.Price)
+plot.xts(log(aeso_ts$Actual.Price))
+
+
+
+```
+
+
+```{r, fig.width = 12, fig.height = 5}
+
+
+par(mfrow=c(2,2))
+plot.xts(aeso_ts$Actual.Price)
+plot.xts(log(aeso_ts$Actual.Price))
+hist(aeso_ts$Actual.Price[aeso_ts$Actual.Price<150])
+hist(log(aeso_ts$Actual.Price))
+
+
+```
+```{r, fig.width = 12, fig.height = 2.5}
+
+
+par(mfrow=c(1,2))
+plot.xts(aeso_ts$Renewables.MW)
+hist(aeso_ts$Renewables.MW)
+
+
+```
+
+
+```{r}
+
+prodMdl <- fitProd[[1]][[1]][[2]]
+
+aeso2_ts <- aeso_ts
+aeso2_ts$unexp.Rnw <- aeso_ts$Renewables.MW - prodMdl@fit$fitted.values
+aeso2_ts$abs.unexp.Rnw <- abs(aeso2_ts$unexp.Rnw)
+aeso2_ts$unexp.MW <- aeso_ts$Actual.MW - aeso_ts$Forecast.MW
+aeso2_ts$abs.unexp.MW <- abs(aeso2_ts$unexp.MW)
+aeso2_ts$exp.Rnw <- prodMdl@fit$fitted.values
+
+
+
+
+
+```
+
+
+
+
+```{r}
+
+bob <- fitProd[[1]][[1]][[2]]
+
+data <- data.frame(bob@model$modeldata$index)
+data$act <- bob@model$modeldata$data
+data$pred <- bob@fit$fitted.value
+bill <-xts(data[,c(2,3)],order.by = data[,c(1)])
+
+
+```
+
+
+
+```{r}
+
+N = nrow(fitLogs[[2]][[1]][[3]]@model$modeldata$vexdata)
+PriceI1.mdl_ts.Var <- fitLogs[[2]][[1]][[3]]@model$modeldata$vexdata[2:N,]
+PriceI1.mdl_ts.mean <- fitLogs[[2]][[1]][[3]]@model$modeldata$mexdata[2:N]
+
+PriceI1.mdl_ts.Var$Var.Wind <- prodMdl.I1@fit$sigma
+PriceI1.mdl_ts.mean$Var.Wind <- prodMdl.I1@fit$sigma
+
+get_spec <- function(xregM, xregV){
+    
+    
+    mdls <- list("eGARCH")
+    ordGARCH <- list(c(1,1)) #,c(1,2),c(2,1)
+    names(ordGARCH) <- c('garch11') #,'garch12','garch21'
+    ordARMA <- c(9,8) #,c(25,0)
+    errs <- c("nig","jsu")
+
+    specPrice = list()
+
+    for (i in 1:length(mdls)){
+      specPrice[[i]] <- list()
+      for (j in 1:length(ordGARCH)){
+        specPrice[[i]][[j]] <- list()
+
+        for (k in 1:length(errs)){
+          specPrice[[i]][[j]][[k]] <- ugarchspec(variance.model = list(model = mdls[[i]],
+                                              garchOrder = ordGARCH[[j]],
+                                              external.regressors = xregV,
+                                              variance.targeting = FALSE),
+                        mean.model = list(armaOrder = ordARMA, 
+                                          include.mean = TRUE,
+                                          archm = TRUE, archpow = 1, #incl. ARCH (wind turbines might need t to speed up)
+                                          arfima = FALSE, 
+                                          external.regressors = xregM, 
+                                          archex = FALSE), 
+                        distribution.model = errs[k])
+        }
+      }
+    }
+
+    names(specPrice) <- c("eGARCH")
+
+    return(specPrice) 
+}
+
+
+get_fit <- function(specx, pModel){
+    
+    fitPrice <- specx
+    errs <- c("nig","jsu")
+    
+    for (i in 1:length(c('eGARCH'))){
+      for (j in 1:length(ordGARCH)){
+        for (k in 1:length(errs)){
+              fitPrice[[i]][[j]][[k]]  <- tryCatch(
+                                    ugarchfit(data = log(pModel$Actual.Price), 
+                                              spec = specx[[i]][[j]][[k]], solver = 'hybrid'),
+                                    error=function(cond) NaN)
+        }
+      }
+    }
+    return(fitPrice)
+}
+
+
+fitPrice.I1 <- get_fit(get_spec(), Price.mdl_ts[2:N,])
+
+
+```
+
+
+#DISTRIBUTIONS!!!!!!!
+
+```{r}
+
+bob <- fitLogs[[2]][[1]][[2]]
+jim <- bob@fit$matcoef
+
+bob <- fitLogs[[2]][[1]][[3]]
+jim <- bob@fit$matcoef
+
+qy = quantile(bob@fit$residuals, p)
+bill <- rdist(distribution = "jsu", length(bob@fit$residuals), sigma=sd(qy[3:(length(qy)-3)]), skew = jim['skew',' Estimate'], shape = jim['shape',' Estimate'])
+
+n = length(bill)
+p = (1:n - 1)/(n - 1)
+
+qx = quantile(bill, p)
+
+
+qqplot(qx, qy)
+#qqplot(qx[3:(length(qx)-3)], qy[3:(length(qy)-3)])
+
+
+```
+
+#UNIT ROOT TESTS
+
+```{r}
+
+bob <- ur.df(aeso_ts$Actual.Price, type = c("drift"), lags = 25, selectlags = c("BIC"))
+
+
+bob1 <- ur.kpss(aeso_ts$Actual.MW, type='mu')
+
+```
+
+```{r}
+
+
+aeso$isWkd <- weekdays(as.POSIXct(rownames(aeso))) %in% c("Friday", "Saturday", "Sunday") == TRUE
+aeso$isWkd <- ifelse(aeso$isWkd,1,0)
+
+aeso$Actual.Posted.Pool.Price[aeso$Actual.Posted.Pool.Price < 0.1] = 0.1
+
+
+
+x <- msts(aeso$Actual.Posted.Pool.Price, seasonal.periods=c(24, 168, 8760))
+fourier_x <- fourier(x, K = c(10,30,2))
+aeso <- cbind(aeso, fourier_x)
+
+
+colnames(aeso) <- c(c('Actual.MW','Actual.Price','Forecast.Price','Forecast.MW','Renewables.MW','NG.Price'),
+                    colnames(aeso[,7:ncol(aeso)]))
+
+
+
+aeso_ts <- na.omit(xts(aeso, as.POSIXct(row.names(aeso))))
+aeso <- na.omit(aeso)
+
+
+aeso_ts$prod0 <- 0
+aeso_ts$prod0['2015-04-01::2015-12-15'] <- 1 
+
+aeso_ts$prod1 <- 0
+aeso_ts$prod1['2015-12-15::2016-06-15'] <- 1 
+
+
+
+
+
+fit <- tbats(x,use.parallel = TRUE, num.cores = 4)
+components <- tbats.components(fit)
+checkresiduals(fit)
+fc <- forecast(fit)
+
+
+
+#indx <- which(grepl('24|168|S[3-9]|C[3-9]|S10|C10', colnames(aeso_ts)), TRUE)
+indx <- which(grepl('24', colnames(aeso_ts)) & grepl('S[1-2][.]|C[1-2][.]', colnames(aeso_ts)), TRUE)
+dataProd <- aeso_ts[,c(indx)]
+
+
+prod <- Arima(aeso_ts$Renewables.MW, order=c(0,0,0), xreg=dataProd)
+
+
+
+
+```
+
+
+```{r}
+
+mdls <- list("sGARCH")
+ordGARCH <- list(c(1,1)) #,c(1,2),c(2,1)
+names(ordGARCH) <- c('garch11') #,'garch12','garch21'
+ordARMA <- c(11,13) #,c(25,0)
+errs <- c("norm","nig","jsu","ghyp", "std","sstd", "ged")
+
+
+spec = list()
+
+indx <- which((grepl('24|8760', 
+                        colnames(aeso_ts)) & grepl(
+                        'S[1-2][.]|C[1-2][.]',
+                        colnames(aeso_ts))) | grepl(
+                        'prod0|prod1', colnames(aeso_ts)), TRUE)
+
+exog <- aeso_ts[,c(indx)]
+
+for (i in 1:length(mdls)){
+  spec[[i]] <- list()
+  for (j in 1:length(ordGARCH)){
+    spec[[i]][[j]] <- list()
+    
+    for (k in 1:length(errs)){
+      spec[[i]][[j]][[k]] <- ugarchspec(variance.model = list(model = mdls[[i]], 
+                                          garchOrder = ordGARCH[[j]],
+                                          variance.targeting = FALSE),
+                    mean.model = list(armaOrder = ordARMA, 
+                                      include.mean = TRUE,
+                                      archm = TRUE, archpow = 1, #incl. ARCH (wind turbines might need t to speed up)
+                                      arfima = FALSE, 
+                                      external.regressors = exog, 
+                                      archex = FALSE), 
+                    distribution.model = errs[k])
+    }
+  }
+}
+
+names(spec) <- c("sGARCH")
+
+
+fitRnw <- spec
+
+for (i in 1:length(mdls)){
+  for (j in 1:length(ordGARCH)){
+    for (k in 1:length(errs)){
+      fitRnw[[i]][[j]][[k]] <- tryCatch(
+                                    ugarchfit(data = aeso_ts$Renewables.MW, 
+                                          spec = fitRnw[[i]][[j]][[k]], solver = 'hybrid', out.sample=1000),
+                                    error=function(cond) NaN)
+    }
+  }
+}
+
+
+
+
+
+temp = fitRnw[[1]][[1]][[7]]
+tempmat = temp@fit$matcoef
+
+
+n = length(temp@fit$residuals)
+p = (1:n - 1)/(n - 1)
+qy = quantile(temp@fit$residuals[250:(length(temp@fit$residuals)-250)], p)
+
+tempdist <- fitdist(distribution = "ged", qy)
+distx <- rdist(distribution = "ged", length(qy), mu = tempdist$pars['mu'], sigma=tempdist$pars['sigma'], 
+               skew = tempdist$pars['skew'], shape = tempdist$pars['shape'])
+
+
+qx = quantile(distx, p)
+
+
+qqplot(qx, qy)
+qqplot(qx[300:(length(qx)-300)], qy[300:(length(qy)-300)])
+
+
+```
+
+
+
+```{r}
+
+
+get_spec <- function(varx, vexog, mexog, outS){
+
+    mexog <- mexog[1:(nrow(mexog) - outS),]
+    
+    mexog$Var.Wind <- varx
+    
+    
+    mdls <- list("eGARCH")
+    ordGARCH <- list(c(1,1)) #,c(1,2),c(2,1)
+    names(ordGARCH) <- c('garch11') #,'garch12','garch21'
+    ordARMA <- c(11,3) #,c(25,0)
+    errs <- c("norm","nig","jsu","ghyp", "ged")
+
+    specPrice = list()
+
+    for (i in 1:length(mdls)){
+      specPrice[[i]] <- list()
+      for (j in 1:length(ordGARCH)){
+        specPrice[[i]][[j]] <- list()
+
+        for (k in 1:length(errs)){
+          specPrice[[i]][[j]][[k]] <- ugarchspec(variance.model = list(model = mdls[[i]],
+                                              garchOrder = ordGARCH[[j]],
+                                              external.regressors = vexog,
+                                              variance.targeting = FALSE),
+                        mean.model = list(armaOrder = ordARMA, 
+                                          include.mean = TRUE,
+                                          archm = TRUE, archpow = 1, 
+                                          arfima = FALSE, external.regressors = mexog, 
+                                          archex = FALSE), 
+                        distribution.model = errs[k])
+        }
+      }
+    }
+
+    names(specPrice) <- c("eGARCH")
+
+    return(specPrice) 
+}
+
+
+get_fit <- function(specx, fitSeries, outS){
+    
+    fitP <- specx
+    
+    for (i in 1:length(mdls)){
+      for (j in 1:length(ordGARCH)){
+        for (k in 1:length(specx[[1]][[1]])){
+              fitP[[i]][[j]][[k]]  <- tryCatch(
+                                    ugarchfit(data = fitSeries, 
+                                              spec = specx[[i]][[j]][[k]], solver = 'hybrid', out.sample=1000),
+                                    error=function(cond) NaN)
+        }
+      }
+    }
+    return(fitP)
+}
+
+
+
+
+
+```
+
+```{r}
+
+mdlRnw <- fitRnw[[1]][[1]][[7]]
+
+mindx =  which(grepl('Actual.MW|Renewables.MW', colnames(aeso_ts)), TRUE)
+mexog <- aeso_ts[,c(mindx)]
+
+
+vindx =  which(grepl('Actual.MW', colnames(aeso_ts)), TRUE)
+varx <- xts(mdlRnw@fit$sigma, index(mexog[1:(nrow(mexog) - 1000),]))
+vexog <- aeso_ts[,c(vindx)]
+vexog <- vexog[1:(nrow(vexog) - 1000),]
+
+vexog$Var.Wind <- varx
+
+specPrice <- get_spec(varx, vexog, mexog, 1000)
+fitPrice <- get_fit(specPrice, log(aeso_ts$Actual.Price),1000)
+
+
+
+```
+
+```{r}
+
+errs = c("norm","nig","jsu","ghyp", "ged")
+
+compare_dist <- function(fitPrice, errs, i){
+  
+  temp = fitPrice[[1]][[1]][[i]]
+  tempmat = temp@fit$matcoef
+  
+  
+  n = length(temp@fit$residuals)
+  p = (1:n - 1)/(n - 1)
+  qy = quantile(temp@fit$residuals[250:(length(temp@fit$residuals)-250)], p)
+  
+  tempdist <- fitdist(distribution = errs[i], qy)
+  distx <- rdist(distribution = errs[i], length(qy), mu = tempdist$pars['mu'], sigma=tempdist$pars['sigma'], 
+                 skew = tempdist$pars['skew'], shape = tempdist$pars['shape'])
+  
+  
+  qx = quantile(distx, p)
+  
+  
+  qqplot(qx, qy)
+  abline(a=0, b=1, col='red')
+  
+  qqplot(qx[300:(length(qx)-300)], qy[300:(length(qy)-300)])
+  abline(a=0, b=1, col='red')
+  
+  
+}
+
+compare_dist(fitPrice,errs,4)
+
+
+
+
+```
+
+
+
+```{r}
+
+indx <- which(grepl('168|24|8760|Actual.MW|Renewables.MW|isWkd', colnames(aeso_ts)), TRUE)
+
+dataPrice <- aeso_ts[,c(indx)]
+
+#blah <- spectrum(aeso_ts$Actual.Price)
+#plot(blah$freq[1:2000],blah$spec[1:2000])
+#1.2e-5*60*60*24
+
+#plot(blah$freq[2000:7000],blah$spec[2000:7000])
+#8e-5*60*60*24
+
+
+
+
+```
+
+```{r}
+
+modelfit <- fitPrice[[1]][[1]][[1]]
+  
+spec = getspec(modelfit);
+setfixed(spec) <- as.list(coef(modelfit));
+forecast = ugarchforecast(spec, n.ahead = 1, 
+                          n.roll = 21000, 
+                          out.sample = 21000,
+                          data = log(aeso_ts[1:(21747),'Actual.Price']));
+
+
+
+forecast.filter = ugarchfilter(data = aeso_ts$Actual.Price[1:(length(aeso_ts$Actual.Price)-1000)], spec = spec)
+
+lastrow <- nrow(aeso_ts) - 2000
+
+#modelfit@model$modeldata$vexdata[1:lastrow,c(1)] <- aeso_ts[,'Forecast.MW'][1:lastrow,c(1)]
+#modelfit@model$modeldata$mexdata[1:lastrow,c(1)] <- aeso_ts[,'Forecast.MW'][1:lastrow,c(1)] 
+
+rollPrice = ugarchroll( getspec(modelfit), data = log(aeso_ts$Actual.Price), 
+                  calculate.VaR = FALSE,
+                  n.ahead = 1, forecast.length = 2000, 
+                  refit.every = 1000, 
+                  refit.window = "recursive", parallel = TRUE, 
+                  parallel.control = list(pkg = c("snowfall"), cores = 4),solver = "hybrid")
+
+
+
+
+```
+
+
+
+
+```{r}
+
+
+
+rollProd = ugarchroll(getspec(mdlRnw), data = aeso_ts$Renewables.MW, 
+                  calculate.VaR = FALSE,
+                  n.ahead = 1, forecast.length = 1000, 
+                  refit.every = 999, 
+                  refit.window = "recursive", parallel = TRUE, 
+                  parallel.control = list(pkg = c("snowfall"), cores = 4),solver = "hybrid")
+
+plot(rollProd@forecast$density$Realized - rollProd@forecast$density$Mu)
+
+```
+
+```{r}
+
+
+temp <- as.list(1:12)
+
+for(i in 1:12){
+  
+  forecastRnw = ugarchforecast(mdlRnw, n.ahead = i, n.roll =1000)
+
+
+  temp[[i]] <- aeso_ts$Renewables.MW[(nrow(aeso_ts)-1000):nrow(aeso_ts)]
+  temp[[i]]$forecast <- forecastRnw@forecast$seriesFor[sprintf('T+%i',i),]
+  temp[[i]]$fSigma <- forecastRnw@forecast$sigmaFor[sprintf('T+%i',i),]
+  
+  
+}
+
+
+
+```
+
+
+```{r}
+
+
+N <- nrow(aeso_ts)
+
+
+forc.Rnw = ugarchforecast(mdlRnw, n.ahead = 12, n.roll =1500)
+tempRnw.MW <- t(as.data.frame(forc.Rnw@forecast$seriesFor))
+tempRnw.S <- t(as.data.frame(forc.Rnw@forecast$sigmaFor))
+
+tempRnw.MW <- xts(tempRnw.MW, as.POSIXct(rownames(tempRnw.MW)))
+tempRnw.S <- xts(tempRnw.S , as.POSIXct(rownames(tempRnw.S)))
+
+
+
+
+mdlPrice <- fitPrice[[1]][[1]][[4]]
+
+forc.P <- ugarchforecast(mdlPrice, n.ahead = 12, n.roll =1500)
+
+temp.P <- t(as.data.frame(forc.P@forecast$seriesFor))
+temp.S <- t(as.data.frame(forc.P@forecast$sigmaFor))
+
+temp.P <- xts(temp.P, as.POSIXct(rownames(temp.P)))
+temp.S <- xts(temp.S, as.POSIXct(rownames(temp.S)))
+
+
+
+
+
+mexog <- aeso_ts[(N-1500):N,c(mindx)]
+vexog <- aeso_ts[(N-1500):N,c(vindx)]
+
+
+mexog.T <- as.list(1:12)
+vexog.T <- as.list(1:12)
+spec.T <- as.list(1:12)
+fit.T <- as.list(1:12)
+
+
+for(i in 1:12){
+  
+  mexog.T[[i]] <- mexog
+  colnames(mexog.T[[i]]) <- c('Expected.MW', 'Expected.Renewables')
+  mexog.T[[i]]$Expected.MW <- aeso_ts$Actual.MW[(N-1500):N]
+  mexog.T[[i]]$Expected.Renewables <- tempRnw.MW[,sprintf('T+%i',i)]
+  mexog.T[[i]]$Rnw.Sigma <- tempRnw.S[,sprintf('T+%i',i)]
+  
+  vexog.T[[i]] <- vexog
+  colnames(vexog.T[[i]]) <- c('Expected.MW')
+  vexog.T[[i]]$Expected.MW <- aeso_ts$Actual.MW[(N-1500):N]
+  vexog.T[[i]]$Rnw.Sigma <- tempRnw.S[,sprintf('T+%i',i)]
+  
+  
+  spec.T[[i]] <- ugarchspec(variance.model = list(model = "eGARCH",
+                                      garchOrder = c(1,1),
+                                      external.regressors = vexog.T[[i]],
+                                      variance.targeting = FALSE),
+                mean.model = list(armaOrder = c(11,3), 
+                                  include.mean = TRUE,
+                                  archm = TRUE, archpow = 1, 
+                                  arfima = FALSE, external.regressors = mexog.T[[i]], 
+                                  archex = FALSE), 
+                distribution.model = "ghyp")
+  
+  
+  
+  
+  fit.T[[i]] <- ugarchfit(data = log(aeso_ts$Actual.Price[(N-1500):N]), 
+                    spec = spec.T[[i]], solver = 'hybrid')
+  
+}
+
+
+
+
+
+```
+
+
+
+```{r}
+
+temp <- as.data.frame(fitPrice[[1]][[1]][[2]]@fit$matcoef)
+
+xtable(temp, digits=c(2,2,1,2,5),display = c('e','e','e','f','f'), 
+       caption = c(NULL, "Note: *,**,*** denote significance at the 10%, 5%, and 1% levels, respectively"))
+
+
+```
+
+
+
+##GRANGER CAUSALITY
+
+```{r}
+
+grangerVars <- aeso_ts$Peak[1:(N-1500)]
+grangerVars$sigma <- mdlRnw@fit$sigma
+
+GrangerTest(grangerVars, locInput = 2)
+
+```
+

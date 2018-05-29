@@ -1,0 +1,1601 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    \usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{Appendix X}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    Table of Contents{}
+
+{{1~~}Imports \& Function Definitions}
+
+{{1.1~~}Main Analysis Functions}
+
+{{2~~}Raw Data}
+
+{{2.1~~}Main Data Sources}
+
+{{2.2~~}Alternative Data Sources}
+
+{{2.3~~}Raw Data Manipulations}
+
+{{2.3.1~~}Create ``45 to 64'' column for income}
+
+{{2.3.2~~}Clean Re-Formatted SDMX tables}
+
+{{2.3.2.1~~}2001 Census}
+
+{{2.3.2.2~~}2006 Census}
+
+{{2.3.2.3~~}2011 Census}
+
+{{2.3.2.4~~}2016 Census}
+
+{{3~~}Define Variables}
+
+{{3.1~~}Join City \& Health Shapefiles}
+
+{{4~~}Run Calculations}
+
+{{4.1~~}Create Data for Analysis in Stata}
+
+    \hypertarget{imports-function-definitions}{%
+\section{Imports \& Function
+Definitions}\label{imports-function-definitions}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}1}]:} \PY{k+kn}{import} \PY{n+nn}{time}\PY{o}{,} \PY{n+nn}{datetime}\PY{o}{,} \PY{n+nn}{sys}\PY{o}{,} \PY{n+nn}{os}\PY{o}{,} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}\PY{o}{,} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}\PY{o}{,} \PY{n+nn}{geopandas} \PY{k}{as} \PY{n+nn}{gpd}
+        \PY{k+kn}{import} \PY{n+nn}{sqlalchemy}
+        \PY{k+kn}{from} \PY{n+nn}{difflib} \PY{k}{import} \PY{n}{SequenceMatcher}
+        \PY{k+kn}{import} \PY{n+nn}{seaborn} \PY{k}{as} \PY{n+nn}{sns}
+        \PY{k+kn}{import} \PY{n+nn}{statsmodels}\PY{n+nn}{.}\PY{n+nn}{api} \PY{k}{as} \PY{n+nn}{sm} 
+        \PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats} \PY{k}{import} \PY{n}{rv\PYZus{}discrete}
+        \PY{k+kn}{import} \PY{n+nn}{sqlite3} \PY{k}{as} \PY{n+nn}{db}
+        \PY{k+kn}{from} \PY{n+nn}{itertools} \PY{k}{import} \PY{n}{permutations}\PY{p}{,} \PY{n}{product}\PY{p}{,} \PY{n}{chain}
+        \PY{k+kn}{from} \PY{n+nn}{functools} \PY{k}{import} \PY{n}{reduce}
+        \PY{k+kn}{import} \PY{n+nn}{re}
+        \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+        \PY{k+kn}{import} \PY{n+nn}{plotly}\PY{n+nn}{.}\PY{n+nn}{plotly} \PY{k}{as} \PY{n+nn}{py}
+        
+        \PY{k+kn}{from} \PY{n+nn}{pyspark}\PY{n+nn}{.}\PY{n+nn}{sql} \PY{k}{import} \PY{n}{SparkSession}
+        
+        
+        \PY{n}{scriptDir} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{dirname}\PY{p}{(}\PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{realpath}\PY{p}{(}\PY{n}{sys}\PY{o}{.}\PY{n}{argv}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}   \PY{c+c1}{\PYZsh{} get script directory}
+        
+        \PY{k}{if} \PY{n}{sys}\PY{o}{.}\PY{n}{platform} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{linux}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+            \PY{n}{genDir} \PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/home/benmo/OneDrive/GitHub/DataPlayground}\PY{l+s+s2}{\PYZdq{}}
+        \PY{k}{else}\PY{p}{:}
+            \PY{k}{try}\PY{p}{:} 
+                \PY{n}{genDir} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{D:/OneDrive/GitHub/DataPlayground}\PY{l+s+s2}{\PYZdq{}} \PY{c+c1}{\PYZsh{}get general functions path}
+                \PY{n}{os}\PY{o}{.}\PY{n}{chdir}\PY{p}{(}\PY{n}{genDir}\PY{p}{)}
+            \PY{k}{except}\PY{p}{:} 
+                \PY{n}{genDir} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{D:/benmo/OneDrive/GitHub/DataPlayground}\PY{l+s+s2}{\PYZdq{}}
+                \PY{n}{os}\PY{o}{.}\PY{n}{chdir}\PY{p}{(}\PY{n}{genDir}\PY{p}{)}
+        
+        \PY{n}{os}\PY{o}{.}\PY{n}{chdir}\PY{p}{(}\PY{n}{genDir}\PY{p}{)}
+        
+        \PY{k+kn}{from} \PY{n+nn}{General} \PY{k}{import} \PY{o}{*} \PY{c+c1}{\PYZsh{} import custom \PYZsq{}general\PYZsq{} functions}
+        
+        \PY{n}{os}\PY{o}{.}\PY{n}{chdir}\PY{p}{(}\PY{n}{scriptDir}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+/home/benmo/intelpython3/lib/python3.6/site-packages/statsmodels/compat/pandas.py:56: FutureWarning: The pandas.core.datetools module is deprecated and will be removed in a future version. Please use the pandas.tseries module instead.
+  from pandas.core import datetools
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+        ---------------------------------------------------------------------------
+
+        RuntimeError                              Traceback (most recent call last)
+
+        RuntimeError: module compiled against API version 0xb but this version of numpy is 0xa
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}2}]:} \PY{o}{\PYZpc{}}\PY{k}{load\PYZus{}ext} rpy2.ipython
+        \PY{o}{\PYZpc{}}\PY{k}{load\PYZus{}ext} beakerx\PYZus{}magics.sql\PYZus{}magic
+        \PY{o}{\PYZpc{}}\PY{k}{load\PYZus{}ext} beakerx\PYZus{}magics.groovy\PYZus{}magic
+        \PY{o}{\PYZpc{}}\PY{k}{load\PYZus{}ext} beakerx\PYZus{}magics.scala\PYZus{}magic
+        \PY{o}{\PYZpc{}}\PY{k}{load\PYZus{}ext} beakerx\PYZus{}magics.java\PYZus{}magic
+\end{Verbatim}
+
+
+    load R libraries:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}3}]:} \PY{o}{\PYZpc{}\PYZpc{}}R 
+        \PY{k+kp}{lapply}\PY{p}{(}\PY{k+kt}{list}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{ggplot2\PYZsq{}}\PY{p}{,}\PY{l+s}{\PYZsq{}}\PY{l+s}{SciencesPo\PYZsq{}}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{binsmooth\PYZsq{}}\PY{p}{)}\PY{p}{,} \PY{k+kn}{require}\PY{p}{,} character.only \PY{o}{=} \PY{k+kc}{TRUE}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+/home/benmo/intelpython3/lib/python3.6/site-packages/rpy2/rinterface/\_\_init\_\_.py:145: RRuntimeWarning:
+
+Loading required package: ggplot2
+
+
+/home/benmo/intelpython3/lib/python3.6/site-packages/rpy2/rinterface/\_\_init\_\_.py:145: RRuntimeWarning:
+
+Loading required package: SciencesPo
+
+
+/home/benmo/intelpython3/lib/python3.6/site-packages/rpy2/rinterface/\_\_init\_\_.py:145: RRuntimeWarning:
+
+SciencesPo 1.4.1
+
+
+/home/benmo/intelpython3/lib/python3.6/site-packages/rpy2/rinterface/\_\_init\_\_.py:145: RRuntimeWarning:
+
+Loading required package: binsmooth
+
+
+
+    \end{Verbatim}
+
+    
+    \begin{verbatim}
+[[1]]
+[1] TRUE
+
+[[2]]
+[1] TRUE
+
+[[3]]
+[1] TRUE
+
+
+    \end{verbatim}
+
+    
+    \hypertarget{main-analysis-functions}{%
+\subsection{Main Analysis Functions}\label{main-analysis-functions}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}4}]:} \PY{n}{similar} \PY{o}{=} \PY{k}{lambda} \PY{n}{a}\PY{p}{,} \PY{n}{b}\PY{p}{:} \PY{n}{SequenceMatcher}\PY{p}{(}\PY{k+kc}{None}\PY{p}{,} \PY{n}{a}\PY{p}{,} \PY{n}{b}\PY{p}{)}\PY{o}{.}\PY{n}{ratio}\PY{p}{(}\PY{p}{)}
+        
+        
+        \PY{k}{def} \PY{n+nf}{floatit}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{repl}\PY{p}{)}\PY{p}{:}    
+            \PY{k}{try}\PY{p}{:}
+                \PY{n}{x} \PY{o}{=} \PY{n+nb}{float}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+            \PY{k}{except}\PY{p}{:}
+                \PY{n}{x} \PY{o}{=} \PY{n}{repl}
+            \PY{k}{return} \PY{n}{x}
+        
+        \PY{n}{get\PYZus{}prob} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{z}\PY{p}{,} \PY{n}{z\PYZus{}s}\PY{o}{=}\PY{n}{x}\PY{p}{:} \PY{n}{z}\PY{o}{/}\PY{n+nb}{sum}\PY{p}{(}\PY{n}{z\PYZus{}s}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{,}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+        
+        \PY{n}{idx} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{IndexSlice}
+        
+        
+        \PY{n}{spark} \PY{o}{=} \PY{n}{SparkSession}\PY{o}{.}\PY{n}{builder}\PY{o}{.}\PY{n}{appName}\PY{p}{(}
+                \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{myspark}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{master}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{local[4]}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{config}\PY{p}{(}
+                        \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{spark.ui.enabled}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{false}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{config}\PY{p}{(}
+                                \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{spark.driver.extraClassPath}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                                \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/home/benmo/DB\PYZus{}drivers/sqlite\PYZhy{}jdbc\PYZhy{}3.16.1.jar}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{config}\PY{p}{(}
+                                        \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{spark.executor.extraClassPath}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+                                        \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/home/benmo/DB\PYZus{}drivers/sqlite\PYZhy{}jdbc\PYZhy{}3.16.1.jar}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{getOrCreate}\PY{p}{(}\PY{p}{)}
+        
+        
+        
+        \PY{k}{def} \PY{n+nf}{get\PYZus{}incDist}\PY{p}{(}\PY{n}{vals}\PY{p}{)}\PY{p}{:}
+            \PY{o}{\PYZpc{}}\PY{k}{R} \PYZhy{}n bins \PYZlt{}\PYZhy{} c(10000, 20000, 35000, 50000, 75000, 100000, NaN)
+            \PY{o}{\PYZpc{}}\PY{k}{R} \PYZhy{}i vals
+            \PY{o}{\PYZpc{}}\PY{k}{R} \PYZhy{}n hist \PYZlt{}\PYZhy{} splinebins(bins, vals)
+            \PY{o}{\PYZpc{}}\PY{k}{R} seqi \PYZlt{}\PYZhy{} seq(0,299000,length=10000)
+            \PY{n}{cdf} \PY{o}{=} \PY{o}{\PYZpc{}}\PY{k}{R} cdf \PYZlt{}\PYZhy{} hist\PYZdl{}splineCDF(seqi)
+            \PY{n}{prob} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{diff}\PY{p}{(}\PY{n}{cdf}\PY{p}{)}
+            \PY{n}{bins} \PY{o}{=} \PY{n}{bins}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}
+            \PY{k}{return} \PY{n}{rv\PYZus{}discrete}\PY{p}{(}\PY{n}{values}\PY{o}{=}\PY{p}{(}\PY{n}{bins}\PY{p}{,} \PY{n}{prob}\PY{o}{/}\PY{n+nb}{sum}\PY{p}{(}\PY{n}{prob}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+        
+        \PY{k}{def} \PY{n+nf}{get\PYZus{}gini}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{:}
+            \PY{k}{try}\PY{p}{:}
+                \PY{n}{gini} \PY{o}{=} \PY{o}{\PYZpc{}}\PY{k}{R} \PYZhy{}i data gini \PYZlt{}\PYZhy{} Gini(data)
+                \PY{k}{return} \PY{n}{gini}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+            \PY{k}{except}\PY{p}{:}
+                \PY{k}{return} \PY{k+kc}{None}
+        
+        \PY{k}{def} \PY{n+nf}{get\PYZus{}atkinson}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{eps}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{)}\PY{p}{:}
+            \PY{k}{try}\PY{p}{:}
+                \PY{o}{\PYZpc{}}\PY{k}{R} \PYZhy{}i eps
+                \PY{n}{atk} \PY{o}{=} \PY{o}{\PYZpc{}}\PY{k}{R} \PYZhy{}i data atk \PYZlt{}\PYZhy{} Atkinson(data, epsilon=eps)
+                \PY{k}{return} \PY{n}{atk}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+            \PY{k}{except}\PY{p}{:}
+                \PY{k}{return} \PY{k+kc}{None}
+        
+        
+        \PY{k}{def} \PY{n+nf}{closestIndex}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{c}\PY{p}{)}\PY{p}{:}
+            \PY{n}{temp} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{similar}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{c}\PY{p}{)}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{p}{)}
+            \PY{k}{return} \PY{n}{temp}\PY{o}{.}\PY{n}{index}\PY{p}{(}\PY{n+nb}{max}\PY{p}{(}\PY{n}{temp}\PY{p}{)}\PY{p}{)}
+        
+        
+        \PY{n}{uniq} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{p}{:} \PY{n}{x}\PY{p}{[}\PY{n}{y}\PY{p}{]}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}
+        
+        
+        \PY{n}{tuple2str} \PY{o}{=} \PY{k}{lambda} \PY{n}{name}\PY{p}{:} \PY{n}{name} \PY{k}{if} \PY{n+nb}{isinstance}\PY{p}{(}\PY{n}{name}\PY{p}{,} \PY{n+nb}{tuple}\PY{p}{)} \PY{o}{==}\PY{k+kc}{False} \PY{k}{else} \PY{n}{reduce}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{p}{:}  \PY{n+nb}{str}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+                \PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZus{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{y}\PY{p}{)}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{,} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{xi}\PY{p}{:} \PY{n+nb}{str}\PY{p}{(}\PY{n}{xi}\PY{p}{)}\PY{p}{,} \PY{n}{name}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+        
+        
+        
+        \PY{k}{def} \PY{n+nf}{get\PYZus{}Healthx}\PY{p}{(}\PY{n}{hRegions}\PY{p}{,} \PY{n}{spark}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{)}\PY{p}{:}
+            \PY{n}{health} \PY{o}{=} \PY{n}{spark}\PY{o}{.}\PY{n}{read}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{jdbc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{option}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{url}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+                                       \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{jdbc:sqlite:/home/benmo/Data/Databases/health.db}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{option}\PY{p}{(}
+                                               \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbtable}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CCHS\PYZus{}Survey}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{p}{)}
+            
+            \PY{n}{healthx} \PY{o}{=} \PY{n}{health}\PY{o}{.}\PY{n}{select}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{*}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{p}{(}\PY{p}{(}\PY{n}{health}\PY{o}{.}\PY{n}{age} \PY{o}{==} \PY{n}{healthVars}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{health}\PY{o}{.}\PY{n}{hrprof} \PY{o}{==} \PY{n}{healthVars}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hrprof}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{p}{)}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}
+                            \PY{n}{health}\PY{o}{.}\PY{n}{unit} \PY{o}{==} \PY{n}{healthVars}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{unit}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{toPandas}\PY{p}{(}\PY{p}{)}
+                            
+            \PY{n}{healthx}\PY{o}{.}\PY{n}{geographicalclassification} \PY{o}{=} \PY{n}{healthx}\PY{o}{.}\PY{n}{geographicalclassification}\PY{o}{.}\PY{n}{apply}\PY{p}{(}
+                    \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+                                      
+            \PY{k}{return} \PY{n}{healthx}
+        
+        
+        
+        \PY{k}{def} \PY{n+nf}{get\PYZus{}incDistx}\PY{p}{(}\PY{n}{provinces}\PY{p}{,} \PY{n}{spark}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{)}\PY{p}{:}
+            \PY{n}{incDist} \PY{o}{=} \PY{n}{spark}\PY{o}{.}\PY{n}{read}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{jdbc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{option}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{url}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+                                       \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{jdbc:sqlite:/home/benmo/Data/Databases/income.db}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{option}\PY{p}{(}
+                                               \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbtable}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{incomeDist}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{p}{)}
+        
+            \PY{n}{incDistx} \PY{o}{=} \PY{n}{incDist}\PY{o}{.}\PY{n}{select}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{filter}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x} \PY{o+ow}{not} \PY{o+ow}{in}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Vector}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Coordinate}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+                                                  \PY{n}{incDist}\PY{o}{.}\PY{n}{columns}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{incDist}\PY{o}{.}\PY{n}{AGE} \PY{o}{==} \PY{n}{incDistVars}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{toPandas}\PY{p}{(}\PY{p}{)} 
+            \PY{n}{incDistx} \PY{o}{=} \PY{n}{incDistx}\PY{p}{[}\PY{n}{incDistx}\PY{o}{.}\PY{n}{geo}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x} \PY{o+ow}{not} \PY{o+ow}{in} \PY{n}{provinces} \PY{o}{+} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Canada}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)} \PY{o}{==} \PY{k+kc}{True}\PY{p}{]}
+            \PY{n}{incDistx}\PY{o}{.}\PY{n}{geo} \PY{o}{=} \PY{n}{incDistx}\PY{o}{.}\PY{n}{geo}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{12}\PY{p}{]} \PY{k}{if} \PY{n}{x}\PY{o}{.}\PY{n}{find}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{,}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{o}{\PYZgt{}}\PY{o}{=}\PY{l+m+mi}{12} \PY{k}{else} \PY{n}{x}\PY{p}{[}\PY{p}{:}\PY{n}{x}\PY{o}{.}\PY{n}{find}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{,}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+            
+            \PY{k}{return} \PY{n}{incDistx} 
+\end{Verbatim}
+
+
+    \hypertarget{raw-data}{%
+\section{Raw Data}\label{raw-data}}
+
+    \hypertarget{main-data-sources}{%
+\subsection{Main Data Sources}\label{main-data-sources}}
+
+    \textbf{Income Data Source:}
+http://www5.statcan.gc.ca/cansim/a26?lang=eng\&retrLang=eng\&id=1110008\&\&pattern=\&stByVal=1\&p1=1\&p2=37\&tabMode=dataTable\&csid=
+
+\textbf{Location:} /home/benmo/Data/Databases/income.db
+
+\textbf{CCHS Data Sources:}
+http://www5.statcan.gc.ca/cansim/a26?lang=eng\&retrLang=eng\&id=1050547\&\&pattern=\&stByVal=1\&p1=1\&p2=-1\&tabMode=dataTable\&csid
+
+http://www5.statcan.gc.ca/cansim/a26?lang=eng\&retrLang=eng\&id=1050547\&\&pattern=\&stByVal=1\&p1=1\&p2=-1\&tabMode=dataTable\&csid=
+
+http://www5.statcan.gc.ca/cansim/a26?lang=eng\&retrLang=eng\&id=1090200\&\&pattern=\&stByVal=1\&p1=1\&p2=-1\&tabMode=dataTable\&csid=
+
+http://www5.statcan.gc.ca/cansim/a26?lang=eng\&retrLang=eng\&id=1090300\&\&pattern=\&stByVal=1\&p1=1\&p2=-1\&tabMode=dataTable\&csid=
+
+http://www5.statcan.gc.ca/cansim/a26?lang=eng\&retrLang=eng\&id=1090401\&\&pattern=\&stByVal=1\&p1=1\&p2=-1\&tabMode=dataTable\&csid=
+
+http://www5.statcan.gc.ca/cansim/a26?lang=eng\&retrLang=eng\&id=1095304\&tabMode=dataTable\&p1=1\&p2=-1\&srchLan=-1\&pattern=unemployment+health
+
+http://www5.statcan.gc.ca/cansim/a26?lang=eng\&retrLang=eng\&id=1095334\&tabMode=dataTable\&p1=1\&p2=-1\&srchLan=-1\&pattern=unemployment+health
+
+\textbf{Location:} /home/benmo/Data/Databases/health.db
+
+    \hypertarget{alternative-data-sources}{%
+\subsection{Alternative Data Sources}\label{alternative-data-sources}}
+
+    \begin{itemize}
+\item
+  These data sources were used for gathering education and labor force
+  information for Canadian cities in major census years
+\item
+  After converting SDMX data files 97-560-XCB2006025, 99-012-X2011042,
+  97F0017XCB2001040, and 98-400-X2016276 from SDMX (xml) to .csv format,
+  the structure files were uploaded to a MongoDB database for querying
+  as shown below:
+\end{itemize}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}5}]:} \PY{k+kn}{from} \PY{n+nn}{pymongo} \PY{k}{import} \PY{n}{MongoClient}
+        \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+        
+        \PY{n}{client} \PY{o}{=} \PY{n}{MongoClient}\PY{p}{(}\PY{p}{)}
+        
+        \PY{n}{mdb} \PY{o}{=} \PY{n}{client}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Data}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}                   \PY{c+c1}{\PYZsh{} Connect to appropriate database in MongoDB}
+        
+        
+        \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{} CREATE KEYS TO QUERY ON THE DATA COLUMNS\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{n}{varList2001} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}GEO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}SEX}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}AGE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{schatt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}ATTENDR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{educ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}HLOSR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{labor}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}LFTAG}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}
+        
+        \PY{n}{varList2006} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}GEO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{immyr}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}YRIM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{educ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}HCDD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}AGE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}SEX}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{studyloc}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}LOC\PYZus{}STUDY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{labor}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}DIM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}
+        
+        \PY{n}{varList2011} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}GEO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{immyr}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}PERIMMB}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{studyloc}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}LOC\PYZus{}STUDY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}AGEGR5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}SEX}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{educ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}HCDD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{labor}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}DIM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}
+        
+        \PY{n}{varList2016} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}GEO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{stem}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}CIP2011\PYZus{}STEM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{educ}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}HCDD\PYZus{}14V}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{immSt}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}IMMDER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}AGEGR5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sex}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}SEX}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{minority}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}DVISMIN}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{labor}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL\PYZus{}DIM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}
+        
+        \PY{n}{varDict} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+m+mi}{2001} \PY{p}{:} \PY{n}{varList2001}\PY{p}{,} \PY{l+m+mi}{2006} \PY{p}{:} \PY{n}{varList2006}\PY{p}{,}
+                   \PY{l+m+mi}{2011} \PY{p}{:} \PY{n}{varList2011}\PY{p}{,} \PY{l+m+mi}{2016} \PY{p}{:} \PY{n}{varList2016}\PY{p}{\PYZcb{}} \PY{c+c1}{\PYZsh{} Pack key lists to a dictionary object}
+        
+        
+        \PY{n}{dataKeysDict} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+        \PY{n}{colsDict} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+        
+        \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}RUN MONGODB QUERIES AND EXTRACT NAMES FOR CODED VARIABLES\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{k}{for} \PY{n}{yr} \PY{o+ow}{in} \PY{n}{varDict}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+            \PY{n}{dataKeysDict}\PY{p}{[}\PY{n}{yr}\PY{p}{]} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+            \PY{n}{colsDict}\PY{p}{[}\PY{n}{yr}\PY{p}{]} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+            \PY{n}{docs} \PY{o}{=} \PY{n}{mdb}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{canadael}\PY{l+s+si}{\PYZob{}y\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{y}\PY{o}{=}\PY{n}{yr}\PY{p}{)}\PY{p}{]}
+            
+            \PY{k}{for} \PY{n}{key} \PY{o+ow}{in} \PY{n}{varDict}\PY{p}{[}\PY{n}{yr}\PY{p}{]}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                \PY{n}{pipeline} \PY{o}{=} \PY{p}{[}
+                    \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}unwind}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}items}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}\PY{p}{,}
+                    \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}unwind}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}items.items}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}\PY{p}{,}
+                    \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}unwind}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}items.items.items}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}\PY{p}{,}
+                    \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}match}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{items.attrs.id}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{varDict}\PY{p}{[}\PY{n}{yr}\PY{p}{]}\PY{p}{[}\PY{n}{key}\PY{p}{]}\PY{p}{\PYZcb{}}\PY{p}{\PYZcb{}}\PY{p}{,}
+                    \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}match}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{items.items.items.attrs.xml:lang}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{en}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}\PY{p}{\PYZcb{}}\PY{p}{,}
+                    \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}group}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZus{}id}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{p}{\PYZob{}}\PY{n}{key}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}items.items.items.items}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                    \PY{n}{key} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{id}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}items.items.attrs}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}\PY{p}{\PYZcb{}}\PY{p}{\PYZcb{}}
+                    \PY{p}{]}
+                \PY{k}{if} \PY{n}{key} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                    \PY{n}{pipeline}\PY{o}{.}\PY{n}{pop}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)} 
+                
+                \PY{n}{temp} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n}{docs}\PY{o}{.}\PY{n}{aggregate}\PY{p}{(}\PY{n}{pipeline}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} collect values for coded varaibles w/ other unwanted queries}
+                
+                \PY{n}{temp} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{filter}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n+nb}{len}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{==}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{temp}\PY{p}{)}\PY{p}{)}      \PY{c+c1}{\PYZsh{} filter out unwanted data}
+                \PY{n}{temp} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{filter}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n+nb}{len}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{n}{key}\PY{p}{]}\PY{p}{)}\PY{o}{==}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{temp}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} filter out unwanted data}
+                \PY{n}{temp} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{n}{temp}\PY{p}{)}\PY{p}{)}\PY{p}{)}    \PY{c+c1}{\PYZsh{} store as dataframe       }
+                \PY{n}{temp}\PY{p}{[}\PY{n}{key}\PY{p}{]} \PY{o}{=} \PY{n}{temp}\PY{p}{[}\PY{n}{key}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}      
+                \PY{n}{temp}\PY{p}{[}\PY{n}{key} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{temp}\PY{p}{[}\PY{n}{key} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+              
+                \PY{n}{dataKeysDict}\PY{p}{[}\PY{n}{yr}\PY{p}{]}\PY{p}{[}\PY{n}{key}\PY{p}{]} \PY{o}{=} \PY{n}{temp}         \PY{c+c1}{\PYZsh{} dictionary object that holds all the coded information}
+                \PY{n}{colsDict}\PY{p}{[}\PY{n}{yr}\PY{p}{]}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{key}\PY{p}{)}             \PY{c+c1}{\PYZsh{} dictionary that holds the column names and preserves positioning}
+\end{Verbatim}
+
+
+    \hypertarget{raw-data-manipulations}{%
+\subsection{Raw Data Manipulations}\label{raw-data-manipulations}}
+
+    As shown below, the income data does not contain a ``45 to 64'' age
+range:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}46}]:} \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}HEALTH DATA\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZdq{}\PYZdq{}\PYZdq{}}
+         \PY{n}{health} \PY{o}{=} \PY{n}{spark}\PY{o}{.}\PY{n}{read}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{jdbc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{option}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{url}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+                                        \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{jdbc:sqlite:/home/benmo/Data/Databases/health.db}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{option}\PY{p}{(}
+                                                \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbtable}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CCHS\PYZus{}Survey}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{p}{)}
+         \PY{n}{health}\PY{o}{.}\PY{n}{select}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{distinct}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
++--------------------+
+|                 age|
++--------------------+
+|      45 to 64 years|
+|Total, 12 years a{\ldots}|
+|Total, 12 year an{\ldots}|
+|      20 to 34 years|
+|   65 years and over|
+|Total, 12 years a{\ldots}|
+|      12 to 19 years|
+|      35 to 44 years|
++--------------------+
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}49}]:} \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}INCOME DATA\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZdq{}\PYZdq{}\PYZdq{}}
+         \PY{n}{incDist} \PY{o}{=} \PY{n}{spark}\PY{o}{.}\PY{n}{read}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{jdbc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{option}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{url}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+                     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{jdbc:sqlite:/home/benmo/Data/Databases/income.db}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{option}\PY{p}{(}
+                                     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbtable}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{incomeDist}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{p}{)}
+         \PY{n}{incDist}\PY{o}{.}\PY{n}{select}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{distinct}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
++-----------------+
+|              age|
++-----------------+
+|   65 to 74 years|
+|   55 to 64 years|
+|75 years and over|
+|    0 to 24 years|
+|   25 to 34 years|
+|65 years and over|
+|   All age groups|
+|   45 to 54 years|
+|   35 to 44 years|
++-----------------+
+
+
+    \end{Verbatim}
+
+    \hypertarget{create-45-to-64-column-for-income}{%
+\subsubsection{Create ``45 to 64'' column for
+income}\label{create-45-to-64-column-for-income}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}51}]:} \PY{n}{incDist} \PY{o}{=} \PY{n}{spark}\PY{o}{.}\PY{n}{read}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{jdbc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{option}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{url}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+                                        \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{jdbc:sqlite:/home/benmo/Data/Databases/income.db}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{option}\PY{p}{(}
+                                                \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbtable}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{incomeDist}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{p}{)} 
+         
+         \PY{n}{incDistx} \PY{o}{=} \PY{n}{incDist}\PY{o}{.}\PY{n}{select}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{*}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{incDist}\PY{o}{.}\PY{n}{AGE}\PY{o}{.}\PY{n}{isin}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{45 to 54 years}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{55 to 64 years}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{toPandas}\PY{p}{(}\PY{p}{)}  \PY{c+c1}{\PYZsh{} Select ages to combine }
+         
+         \PY{n}{incDistx}\PY{o}{.}\PY{n}{Value} \PY{o}{=} \PY{n}{incDistx}\PY{o}{.}\PY{n}{Value}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{str}\PY{p}{)}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[\PYZca{}0\PYZhy{}9]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}numeric}\PY{p}{)} \PY{c+c1}{\PYZsh{} Value column \PYZhy{}\PYZgt{} convertable string}
+         
+         
+         \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}Retain old identifiers to merge later\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZdq{}\PYZdq{}\PYZdq{}}
+         \PY{n}{newVecCoord} \PY{o}{=} \PY{n}{incDistx}\PY{p}{[}\PY{n}{incDistx}\PY{o}{.}\PY{n}{AGE} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{45 to 54 years}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AGE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}                   
+         \PY{n}{newVecCoord}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Vector}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Coordinate}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{n}{newVecCoord}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Vector}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Coordinate}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{new\PYZhy{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{x}\PY{p}{)}
+         
+         
+         \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}Create Agrregated Age Column\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZdq{}\PYZdq{}\PYZdq{}}
+         \PY{n}{incDistx}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Vector}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Coordinate}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+         \PY{n}{temp} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{pivot\PYZus{}table}\PY{p}{(}\PY{n}{incDistx}\PY{p}{,} \PY{n}{values}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{n}{incDistx}\PY{o}{.}\PY{n}{columns}\PY{p}{[}\PY{n}{incDistx}\PY{o}{.}\PY{n}{columns}\PY{o}{.}\PY{n}{isin}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AGE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{==}\PY{k+kc}{False}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{,}
+                               \PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AGE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{n}{aggfunc}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{)}
+         \PY{n}{temp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{temp}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+         \PY{n}{temp}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{45 to 54 years}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{55 to 64 years}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+         \PY{n}{temp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AGE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{45 to 64 years}\PY{l+s+s1}{\PYZsq{}}
+         \PY{n}{temp}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+         \PY{n}{temp}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{name} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Index}\PY{l+s+s1}{\PYZsq{}}
+         
+         
+         
+         \PY{n}{mergecols} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Ref\PYZus{}Date}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GEO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Geographical classification}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SEX}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{INC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{c+c1}{\PYZsh{} columns to merge old identifiers with new Age column}
+         
+         
+         \PY{n}{temp}\PY{o}{=}\PY{n}{temp}\PY{o}{.}\PY{n}{merge}\PY{p}{(}\PY{n}{newVecCoord}\PY{p}{,}\PY{n}{on}\PY{o}{=}\PY{n}{mergecols}\PY{p}{,}\PY{n}{how}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{left}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}                       \PY{c+c1}{\PYZsh{} merge}
+         \PY{n}{temp}\PY{o}{.}\PY{n}{Value} \PY{o}{=} \PY{n}{temp}\PY{o}{.}\PY{n}{Value}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{str}\PY{p}{)}
+         \PY{n}{temp}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}51}]:}        Ref\_Date      GEO Geographical classification         SEX  \textbackslash{}
+         0          2000  Alberta                              Both sexes   
+         1          2000  Alberta                              Both sexes   
+         2          2000  Alberta                              Both sexes   
+         3          2000  Alberta                              Both sexes   
+         4          2000  Alberta                              Both sexes   
+         5          2000  Alberta                              Both sexes   
+         6          2000  Alberta                              Both sexes   
+         7          2000  Alberta                              Both sexes   
+         8          2000  Alberta                              Both sexes   
+         9          2000  Alberta                              Both sexes   
+         10         2000  Alberta                              Both sexes   
+         11         2000  Alberta                              Both sexes   
+         12         2000  Alberta                              Both sexes   
+         13         2000  Alberta                              Both sexes   
+         14         2000  Alberta                                 Females   
+         15         2000  Alberta                                 Females   
+         16         2000  Alberta                                 Females   
+         17         2000  Alberta                                 Females   
+         18         2000  Alberta                                 Females   
+         19         2000  Alberta                                 Females   
+         20         2000  Alberta                                 Females   
+         21         2000  Alberta                                 Females   
+         22         2000  Alberta                                 Females   
+         23         2000  Alberta                                 Females   
+         24         2000  Alberta                                 Females   
+         25         2000  Alberta                                 Females   
+         26         2000  Alberta                                 Females   
+         27         2000  Alberta                                 Females   
+         28         2000  Alberta                                   Males   
+         29         2000  Alberta                                   Males   
+         {\ldots}         {\ldots}      {\ldots}                         {\ldots}         {\ldots}   
+         74934      2015    Yukon                              Both sexes   
+         74935      2015    Yukon                              Both sexes   
+         74936      2015    Yukon                                 Females   
+         74937      2015    Yukon                                 Females   
+         74938      2015    Yukon                                 Females   
+         74939      2015    Yukon                                 Females   
+         74940      2015    Yukon                                 Females   
+         74941      2015    Yukon                                 Females   
+         74942      2015    Yukon                                 Females   
+         74943      2015    Yukon                                 Females   
+         74944      2015    Yukon                                 Females   
+         74945      2015    Yukon                                 Females   
+         74946      2015    Yukon                                 Females   
+         74947      2015    Yukon                                 Females   
+         74948      2015    Yukon                                 Females   
+         74949      2015    Yukon                                 Females   
+         74950      2015    Yukon                                   Males   
+         74951      2015    Yukon                                   Males   
+         74952      2015    Yukon                                   Males   
+         74953      2015    Yukon                                   Males   
+         74954      2015    Yukon                                   Males   
+         74955      2015    Yukon                                   Males   
+         74956      2015    Yukon                                   Males   
+         74957      2015    Yukon                                   Males   
+         74958      2015    Yukon                                   Males   
+         74959      2015    Yukon                                   Males   
+         74960      2015    Yukon                                   Males   
+         74961      2015    Yukon                                   Males   
+         74962      2015    Yukon                                   Males   
+         74963      2015    Yukon                                   Males   
+         
+                                                     INC      Value             AGE  \textbackslash{}
+         0       Persons with income of \$10,000 and over  5004100.0  45 to 64 years   
+         1      Persons with income of \$100,000 and over   345700.0  45 to 64 years   
+         2       Persons with income of \$15,000 and over  4407000.0  45 to 64 years   
+         3      Persons with income of \$150,000 and over   142100.0  45 to 64 years   
+         4       Persons with income of \$20,000 and over  3942200.0  45 to 64 years   
+         5      Persons with income of \$200,000 and over    83900.0  45 to 64 years   
+         6       Persons with income of \$25,000 and over  3499000.0  45 to 64 years   
+         7      Persons with income of \$250,000 and over    58100.0  45 to 64 years   
+         8       Persons with income of \$35,000 and over  2610900.0  45 to 64 years   
+         9        Persons with income of \$5,000 and over  5539000.0  45 to 64 years   
+         10      Persons with income of \$50,000 and over  1647600.0  45 to 64 years   
+         11      Persons with income of \$75,000 and over   701400.0  45 to 64 years   
+         12             Persons with income under \$5,000   568800.0  45 to 64 years   
+         13                    Total persons with income  6107800.0  45 to 64 years   
+         14      Persons with income of \$10,000 and over  2253200.0  45 to 64 years   
+         15     Persons with income of \$100,000 and over    45600.0  45 to 64 years   
+         16      Persons with income of \$15,000 and over  1881400.0  45 to 64 years   
+         17     Persons with income of \$150,000 and over    16500.0  45 to 64 years   
+         18      Persons with income of \$20,000 and over  1588300.0  45 to 64 years   
+         19     Persons with income of \$200,000 and over     8900.0  45 to 64 years   
+         20      Persons with income of \$25,000 and over  1320100.0  45 to 64 years   
+         21     Persons with income of \$250,000 and over     5900.0  45 to 64 years   
+         22      Persons with income of \$35,000 and over   831000.0  45 to 64 years   
+         23       Persons with income of \$5,000 and over  2593700.0  45 to 64 years   
+         24      Persons with income of \$50,000 and over   426200.0  45 to 64 years   
+         25      Persons with income of \$75,000 and over   116700.0  45 to 64 years   
+         26             Persons with income under \$5,000   405500.0  45 to 64 years   
+         27                    Total persons with income  2999100.0  45 to 64 years   
+         28      Persons with income of \$10,000 and over  2751000.0  45 to 64 years   
+         29     Persons with income of \$100,000 and over   300100.0  45 to 64 years   
+         {\ldots}                                         {\ldots}        {\ldots}             {\ldots}   
+         74934          Persons with income under \$5,000     3800.0  45 to 64 years   
+         74935                 Total persons with income    98600.0  45 to 64 years   
+         74936   Persons with income of \$10,000 and over    45800.0  45 to 64 years   
+         74937  Persons with income of \$100,000 and over     6600.0  45 to 64 years   
+         74938   Persons with income of \$15,000 and over    44000.0  45 to 64 years   
+         74939  Persons with income of \$150,000 and over     1500.0  45 to 64 years   
+         74940   Persons with income of \$20,000 and over    41600.0  45 to 64 years   
+         74941  Persons with income of \$200,000 and over      500.0  45 to 64 years   
+         74942   Persons with income of \$25,000 and over    39100.0  45 to 64 years   
+         74943  Persons with income of \$250,000 and over      400.0  45 to 64 years   
+         74944   Persons with income of \$35,000 and over    34400.0  45 to 64 years   
+         74945    Persons with income of \$5,000 and over    47700.0  45 to 64 years   
+         74946   Persons with income of \$50,000 and over    27500.0  45 to 64 years   
+         74947   Persons with income of \$75,000 and over    14700.0  45 to 64 years   
+         74948          Persons with income under \$5,000     2000.0  45 to 64 years   
+         74949                 Total persons with income    49600.0  45 to 64 years   
+         74950   Persons with income of \$10,000 and over    45500.0  45 to 64 years   
+         74951  Persons with income of \$100,000 and over    10200.0  45 to 64 years   
+         74952   Persons with income of \$15,000 and over    43300.0  45 to 64 years   
+         74953  Persons with income of \$150,000 and over     2800.0  45 to 64 years   
+         74954   Persons with income of \$20,000 and over    40700.0  45 to 64 years   
+         74955  Persons with income of \$200,000 and over      900.0  45 to 64 years   
+         74956   Persons with income of \$25,000 and over    38400.0  45 to 64 years   
+         74957  Persons with income of \$250,000 and over      500.0  45 to 64 years   
+         74958   Persons with income of \$35,000 and over    34900.0  45 to 64 years   
+         74959    Persons with income of \$5,000 and over    47300.0  45 to 64 years   
+         74960   Persons with income of \$50,000 and over    29100.0  45 to 64 years   
+         74961   Persons with income of \$75,000 and over    19300.0  45 to 64 years   
+         74962          Persons with income under \$5,000     1800.0  45 to 64 years   
+         74963                 Total persons with income    49100.0  45 to 64 years   
+         
+                       Vector     Coordinate  
+         0      new-v20802224   new-32.1.5.4  
+         1      new-v20802231  new-32.1.5.11  
+         2      new-v20802225   new-32.1.5.5  
+         3      new-v20802232  new-32.1.5.12  
+         4      new-v20802226   new-32.1.5.6  
+         5      new-v20802233  new-32.1.5.13  
+         6      new-v20802227   new-32.1.5.7  
+         7      new-v20802234  new-32.1.5.14  
+         8      new-v20802228   new-32.1.5.8  
+         9      new-v20802223   new-32.1.5.3  
+         10     new-v20802229   new-32.1.5.9  
+         11     new-v20802230  new-32.1.5.10  
+         12     new-v20802222   new-32.1.5.2  
+         13     new-v20802221   new-32.1.5.1  
+         14     new-v20802480   new-32.3.5.4  
+         15     new-v20802487  new-32.3.5.11  
+         16     new-v20802481   new-32.3.5.5  
+         17     new-v20802488  new-32.3.5.12  
+         18     new-v20802482   new-32.3.5.6  
+         19     new-v20802489  new-32.3.5.13  
+         20     new-v20802483   new-32.3.5.7  
+         21     new-v20802490  new-32.3.5.14  
+         22     new-v20802484   new-32.3.5.8  
+         23     new-v20802479   new-32.3.5.3  
+         24     new-v20802485   new-32.3.5.9  
+         25     new-v20802486  new-32.3.5.10  
+         26     new-v20802478   new-32.3.5.2  
+         27     new-v20802477   new-32.3.5.1  
+         28     new-v20802352   new-32.2.5.4  
+         29     new-v20802359  new-32.2.5.11  
+         {\ldots}              {\ldots}            {\ldots}  
+         74934  new-v20804526   new-38.1.5.2  
+         74935  new-v20804525   new-38.1.5.1  
+         74936  new-v20804784   new-38.3.5.4  
+         74937  new-v20804791  new-38.3.5.11  
+         74938  new-v20804785   new-38.3.5.5  
+         74939  new-v20804792  new-38.3.5.12  
+         74940  new-v20804786   new-38.3.5.6  
+         74941  new-v20804793  new-38.3.5.13  
+         74942  new-v20804787   new-38.3.5.7  
+         74943  new-v20804794  new-38.3.5.14  
+         74944  new-v20804788   new-38.3.5.8  
+         74945  new-v20804783   new-38.3.5.3  
+         74946  new-v20804789   new-38.3.5.9  
+         74947  new-v20804790  new-38.3.5.10  
+         74948  new-v20804782   new-38.3.5.2  
+         74949  new-v20804781   new-38.3.5.1  
+         74950  new-v20804656   new-38.2.5.4  
+         74951  new-v20804663  new-38.2.5.11  
+         74952  new-v20804657   new-38.2.5.5  
+         74953  new-v20804664  new-38.2.5.12  
+         74954  new-v20804658   new-38.2.5.6  
+         74955  new-v20804665  new-38.2.5.13  
+         74956  new-v20804659   new-38.2.5.7  
+         74957  new-v20804666  new-38.2.5.14  
+         74958  new-v20804660   new-38.2.5.8  
+         74959  new-v20804655   new-38.2.5.3  
+         74960  new-v20804661   new-38.2.5.9  
+         74961  new-v20804662  new-38.2.5.10  
+         74962  new-v20804654   new-38.2.5.2  
+         74963  new-v20804653   new-38.2.5.1  
+         
+         [74964 rows x 9 columns]
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}45}]:} \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}Update Database\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZdq{}\PYZdq{}\PYZdq{}}
+         
+         \PY{n}{conn} \PY{o}{=} \PY{n}{db}\PY{o}{.}\PY{n}{connect}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/home/benmo/Data/Databases/income.db}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         
+         
+         \PY{n}{temp}\PY{o}{.}\PY{n}{to\PYZus{}sql}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{incomeDist}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{con}\PY{o}{=}\PY{n}{conn}\PY{p}{,} \PY{n}{if\PYZus{}exists}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{append}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+/home/benmo/intelpython3/lib/python3.6/site-packages/pandas/core/generic.py:2127: UserWarning: The spaces in these column names will not be changed. In pandas versions < 0.14, spaces were converted to underscores.
+  dtype=dtype)
+
+    \end{Verbatim}
+
+    \hypertarget{clean-re-formatted-sdmx-tables}{%
+\subsubsection{Clean Re-Formatted SDMX
+tables}\label{clean-re-formatted-sdmx-tables}}
+
+    \hypertarget{census}{%
+\paragraph{2001 Census}\label{census}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}24}]:} \PY{n}{tempdf} \PY{o}{=} \PY{n}{spark}\PY{o}{.}\PY{n}{read}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{option}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{header}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{true}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{load}\PY{p}{(}
+             \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/home/benmo/Apps/SDMX\PYZus{}Converter\PYZus{}Platform\PYZhy{}Independent\PYZus{}v.3.1.7\PYZus{}2014.06.30/Converter\PYZus{}Data/Output Files/census2001.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         
+         
+         \PY{n}{census2001} \PY{o}{=} \PY{n}{tempdf}\PY{o}{.}\PY{n}{select}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{01}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{11}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{12}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{13}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{14}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{15}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{23901360}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{tempdf}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{13}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{toPandas}\PY{p}{(}\PY{p}{)}
+         \PY{n}{census2001} \PY{o}{=} \PY{n}{census2001}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{13}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{01}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{11}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{12}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{14}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{educ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{15}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{labor}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{23901360}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \hypertarget{census}{%
+\paragraph{2006 Census}\label{census}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}25}]:} \PY{n}{tempdf} \PY{o}{=} \PY{n}{spark}\PY{o}{.}\PY{n}{read}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{option}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{header}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{true}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{load}\PY{p}{(}
+             \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/home/benmo/Apps/SDMX\PYZus{}Converter\PYZus{}Platform\PYZhy{}Independent\PYZus{}v.3.1.7\PYZus{}2014.06.30/Converter\PYZus{}Data/Output Files/census2006.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         
+         
+         \PY{n}{census2006} \PY{o}{=} \PY{n}{tempdf}\PY{o}{.}\PY{n}{select}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{01}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{11}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{12}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{13}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{14}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{15}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{16}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{25664220}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{p}{(}\PY{n}{tempdf}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{11}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{tempdf}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{15}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{toPandas}\PY{p}{(}\PY{p}{)}
+         \PY{n}{census2006} \PY{o}{=} \PY{n}{census2006}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{11}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{15}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{01}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{12}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{educ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{13}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{14}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{16}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{labor}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{25664220}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \hypertarget{census}{%
+\paragraph{2011 Census}\label{census}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}26}]:} \PY{n}{tempdf} \PY{o}{=} \PY{n}{spark}\PY{o}{.}\PY{n}{read}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{option}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{header}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{true}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{load}\PY{p}{(}
+             \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/home/benmo/Apps/SDMX\PYZus{}Converter\PYZus{}Platform\PYZhy{}Independent\PYZus{}v.3.1.7\PYZus{}2014.06.30/Converter\PYZus{}Data/Output Files/census2011.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         
+         
+         \PY{n}{census2011} \PY{o}{=} \PY{n}{tempdf}\PY{o}{.}\PY{n}{select}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{01}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{11}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{12}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{13}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{14}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{15}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{16}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{27259525}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{p}{(}\PY{n}{tempdf}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{11}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{tempdf}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{12}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{toPandas}\PY{p}{(}\PY{p}{)}
+         \PY{n}{census2011} \PY{o}{=} \PY{n}{census2011}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{11}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{12}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{01}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{13}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{14}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{15}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{educ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{16}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{labor}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{27259525}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \hypertarget{census}{%
+\paragraph{2016 Census}\label{census}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}27}]:} \PY{n}{tempdf} \PY{o}{=} \PY{n}{spark}\PY{o}{.}\PY{n}{read}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{option}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{header}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{true}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{load}\PY{p}{(}
+             \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/home/benmo/Apps/SDMX\PYZus{}Converter\PYZus{}Platform\PYZhy{}Independent\PYZus{}v.3.1.7\PYZus{}2014.06.30/Converter\PYZus{}Data/Output Files/census2016.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         
+         
+         \PY{n}{census2016} \PY{o}{=} \PY{n}{tempdf}\PY{o}{.}\PY{n}{select}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{01}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{11}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{12}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{13}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{14}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{15}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{16}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{17}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{28643015}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{p}{(}\PY{p}{(}\PY{n}{tempdf}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{11}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{tempdf}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{13}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{tempdf}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{16}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{toPandas}\PY{p}{(}\PY{p}{)}
+         \PY{n}{census2016} \PY{o}{=} \PY{n}{census2016}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{11}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{13}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{16}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{01}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{12}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{educ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{14}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{15}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{17}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{labor}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{28643015}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}32}]:} \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}COMBINE CENSUS DATA \PYZam{} RECODE VALUES\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZdq{}\PYZdq{}\PYZdq{}}
+         
+         \PY{k}{def} \PY{n+nf}{recode}\PY{p}{(}\PY{n}{df}\PY{p}{,} \PY{n}{dataKeys}\PY{p}{)}\PY{p}{:}
+             \PY{n}{df}\PY{o}{.}\PY{n}{geo} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{geo}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{dataKeys}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{n}{dataKeys}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{geoid} \PY{o}{==} \PY{n}{x}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+             \PY{n}{df}\PY{o}{.}\PY{n}{educ} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{educ}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{dataKeys}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{educ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{n}{dataKeys}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{educ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{educid} \PY{o}{==} \PY{n}{x}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{educ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+             \PY{n}{df}\PY{o}{.}\PY{n}{labor} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{labor}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{dataKeys}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{labor}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{n}{dataKeys}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{labor}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{laborid} \PY{o}{==} \PY{n}{x}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{labor}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+             \PY{n}{df}\PY{o}{.}\PY{n}{age} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{age}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{dataKeys}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{n}{dataKeys}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{ageid} \PY{o}{==} \PY{n}{x}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+             \PY{n}{df}\PY{o}{.}\PY{n}{sex} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{sex}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{dataKeys}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{n}{dataKeys}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{sexid} \PY{o}{==} \PY{n}{x}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+             \PY{k}{return} \PY{n}{df}
+         
+         
+         
+         \PY{n}{census2001} \PY{o}{=} \PY{n}{recode}\PY{p}{(}\PY{n}{census2001}\PY{p}{,} \PY{n}{dataKeysDict}\PY{p}{[}\PY{l+m+mi}{2001}\PY{p}{]}\PY{p}{)}
+         \PY{n}{census2006} \PY{o}{=} \PY{n}{recode}\PY{p}{(}\PY{n}{census2006}\PY{p}{,} \PY{n}{dataKeysDict}\PY{p}{[}\PY{l+m+mi}{2006}\PY{p}{]}\PY{p}{)}
+         \PY{n}{census2011} \PY{o}{=} \PY{n}{recode}\PY{p}{(}\PY{n}{census2011}\PY{p}{,} \PY{n}{dataKeysDict}\PY{p}{[}\PY{l+m+mi}{2011}\PY{p}{]}\PY{p}{)}
+         \PY{n}{census2016} \PY{o}{=} \PY{n}{recode}\PY{p}{(}\PY{n}{census2016}\PY{p}{,} \PY{n}{dataKeysDict}\PY{p}{[}\PY{l+m+mi}{2016}\PY{p}{]}\PY{p}{)}
+         
+         \PY{n}{census2001}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{2001}
+         \PY{n}{census2006}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{2006}
+         \PY{n}{census2011}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{2011}
+         \PY{n}{census2016}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{2016}
+         
+         \PY{n}{conn} \PY{o}{=} \PY{n}{db}\PY{o}{.}\PY{n}{connect}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/home/benmo/Data/Databases/health.db}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{census2001}\PY{o}{.}\PY{n}{to\PYZus{}sql}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{educ\PYZus{}cities}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{con}\PY{o}{=}\PY{n}{conn}\PY{p}{,} \PY{n}{if\PYZus{}exists}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{append}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}   \PY{c+c1}{\PYZsh{}send data to database}
+         \PY{n}{census2006}\PY{o}{.}\PY{n}{to\PYZus{}sql}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{educ\PYZus{}cities}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{con}\PY{o}{=}\PY{n}{conn}\PY{p}{,} \PY{n}{if\PYZus{}exists}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{append}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}   \PY{c+c1}{\PYZsh{}send data to database}
+         \PY{n}{census2011}\PY{o}{.}\PY{n}{to\PYZus{}sql}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{educ\PYZus{}cities}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{con}\PY{o}{=}\PY{n}{conn}\PY{p}{,} \PY{n}{if\PYZus{}exists}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{append}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}   \PY{c+c1}{\PYZsh{}send data to database}
+         \PY{n}{census2016}\PY{o}{.}\PY{n}{to\PYZus{}sql}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{educ\PYZus{}cities}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{con}\PY{o}{=}\PY{n}{conn}\PY{p}{,} \PY{n}{if\PYZus{}exists}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{append}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}   \PY{c+c1}{\PYZsh{}send data to database}
+\end{Verbatim}
+
+
+    \hypertarget{define-variables}{%
+\section{Define Variables}\label{define-variables}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}28}]:} \PY{n}{uri}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{postgresql://postgres:justbusted@localhost:5433/geodata}\PY{l+s+s2}{\PYZdq{}}
+         \PY{n}{engine} \PY{o}{=} \PY{n}{sqlalchemy}\PY{o}{.}\PY{n}{create\PYZus{}engine}\PY{p}{(}\PY{n}{uri}\PY{p}{)}
+         
+         
+         
+         \PY{n}{healthShp} \PY{o}{=} \PY{n}{gpd}\PY{o}{.}\PY{n}{read\PYZus{}file}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/home/benmo/Data/GeoData/canHealth.shp}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}               \PY{c+c1}{\PYZsh{} get shapefile for health regions}
+         \PY{n}{canadaShp} \PY{o}{=} \PY{n}{gpd}\PY{o}{.}\PY{n}{read\PYZus{}postgis}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{select * from can\PYZus{}adm3}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{uri}\PY{p}{,} 
+                                 \PY{n}{geom\PYZus{}col}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geom}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{crs}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{init}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{epsg:4326}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}               \PY{c+c1}{\PYZsh{} get shapefile for Canada (incl. city names)}
+         
+         
+             
+         \PY{n}{healthVars}\PY{p}{,} \PY{n}{incDistVars} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}\PY{p}{,} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+         
+         \PY{n}{healthVars}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hrprof}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Current smoker, daily or occasional}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Arthritis}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Current smoker, daily}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}  
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{5 or more drinks on one occasion, at least once a month in the past year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Heavy drinking}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Fruit and vegetable consumption, 5 times or more per day}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Physical activity during leisure\PYZhy{}time, moderately active or active}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Physical activity during leisure\PYZhy{}time, inactive}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Body mass index, self\PYZhy{}reported, adult (18 years and over), overweight or obese}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}  
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Body mass index, self\PYZhy{}reported, adult (18 years and over), obese}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sense of belonging to local community, somewhat strong or very strong}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Has a regular medical doctor}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Contact with a medical doctor in the past 12 months}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}  
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Mood disorder}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wears a helmet when riding a bicycle, always}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Functional health, good to full}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Injuries in the past 12 months causing limitation of normal activities}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Injuries in the past 12 months, sought medical attention}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Chronic obstructive pulmonary disease (COPD)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Perceived health, very good or excellent}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Perceived health, fair or poor}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Perceived mental health, very good or excellent}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Perceived mental health, fair or poor}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Life satisfaction, satisfied or very satisfied}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Perceived life stress, quite a lot (15 years and over)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Diabetes}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Asthma}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{High blood pressure}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Pain or discomfort by severity, moderate or severe}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Pain or discomfort that prevents activities}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Participation and activity limitation, sometimes or often}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         
+         
+         \PY{n}{healthVars}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{unit}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Number of persons}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Percent}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         
+         \PY{n}{healthVars}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{20 to 34 years}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{35 to 44 years}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                 \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{45 to 64 years}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Total, 12 years and over}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         
+         \PY{n}{incDistVars}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{25 to 34 years}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{35 to 44 years}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                 \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{45 to 64 years}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{All age groups}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\end{Verbatim}
+
+
+    \hypertarget{join-city-health-shapefiles}{%
+\subsection{Join City \& Health
+Shapefiles}\label{join-city-health-shapefiles}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}31}]:} \PY{n}{canadaShp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo\PYZus{}idx}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{canadaShp}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}         \PY{c+c1}{\PYZsh{}create column containing unique city index}
+         
+         
+         \PY{n}{cities\PYZus{}inH} \PY{o}{=} \PY{n}{gpd}\PY{o}{.}\PY{n}{sjoin}\PY{p}{(}\PY{n}{canadaShp}\PY{p}{,} \PY{n}{healthShp}\PY{p}{,} 
+                                \PY{n}{how}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{left}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{op}\PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{within}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}        \PY{c+c1}{\PYZsh{}spatially join city \PYZam{} health region shapefiles}
+         
+         \PY{c+c1}{\PYZsh{}note: this operation only joins cities w/ boundaries completely within health regions}
+         
+         \PY{n}{cities\PYZus{}inH} \PY{o}{=} \PY{n}{cities\PYZus{}inH}\PY{p}{[}\PY{n}{cities\PYZus{}inH}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HR\PYZus{}UID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{isna}\PY{p}{(}\PY{p}{)} \PY{o}{==} \PY{k+kc}{False}\PY{p}{]} \PY{c+c1}{\PYZsh{}drop cities not within h\PYZhy{}regions}
+         
+         
+         \PY{n}{missingcities} \PY{o}{=} \PY{n}{gpd}\PY{o}{.}\PY{n}{sjoin}\PY{p}{(}\PY{n}{canadaShp}\PY{p}{,} \PY{n}{healthShp}\PY{p}{,} 
+                                   \PY{n}{how}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{left}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{op}\PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{within}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}           \PY{c+c1}{\PYZsh{}collect cities missed by spatial join}
+         
+         \PY{n}{missingcities} \PY{o}{=} \PY{n}{missingcities}\PY{p}{[}\PY{n}{missingcities}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HR\PYZus{}UID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{isna}\PY{p}{(}\PY{p}{)} \PY{o}{==} \PY{k+kc}{True}\PY{p}{]}\PY{p}{[}
+                 \PY{n}{missingcities}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{engtype\PYZus{}3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{City}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}                 \PY{c+c1}{\PYZsh{}select only cities (pop \PYZgt{} \PYZti{}10,000)}
+         
+         \PY{n}{missingcities}\PY{o}{.}\PY{n}{geom} \PY{o}{=} \PY{n}{missingcities}\PY{o}{.}\PY{n}{geom}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{o}{.}\PY{n}{centroid}\PY{p}{)} \PY{c+c1}{\PYZsh{}get centroid of cities}
+         
+         \PY{n}{missingcities} \PY{o}{=} \PY{n}{gpd}\PY{o}{.}\PY{n}{sjoin}\PY{p}{(}\PY{n}{missingcities}\PY{p}{[}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{filter}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} 
+                                                             \PY{n}{x} \PY{o+ow}{not} \PY{o+ow}{in} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{index\PYZus{}left}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{index\PYZus{}right}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+                                                             \PY{n}{missingcities}\PY{o}{.}\PY{n}{columns}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{]}\PY{p}{,}
+                                                 \PY{n}{healthShp}\PY{p}{,} \PY{n}{how}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{left}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{op}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{within}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{c+c1}{\PYZsh{}add the missing cities }
+         
+         \PY{c+c1}{\PYZsh{}note: missing cities added to shapefile by joining city centroid to the appropriate h\PYZhy{}region}
+         
+         \PY{n}{cities} \PY{o}{=} \PY{n}{cities\PYZus{}inH}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{missingcities}\PY{p}{)}       \PY{c+c1}{\PYZsh{}collect all the cities (missing/non\PYZhy{}missing) to one shapefile}
+         
+         
+         \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}Merge the Health Shapefile with the edited Canada\PYZhy{}City shapefile\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZdq{}\PYZdq{}\PYZdq{}}
+         
+         \PY{n}{healthCanShp} \PY{o}{=} \PY{n}{gpd}\PY{o}{.}\PY{n}{sjoin}\PY{p}{(}\PY{n}{healthShp}\PY{p}{,} \PY{n}{cities}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geom}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo\PYZus{}idx}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                                                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name\PYZus{}3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{engtype\PYZus{}3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{p}{]}\PY{p}{,} \PY{n}{how}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{left}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{op}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{contains}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+/home/benmo/intelpython3/lib/python3.6/site-packages/geopandas/geodataframe.py:398: UserWarning:
+
+Boolean Series key will be reindexed to match DataFrame index.
+
+/home/benmo/intelpython3/lib/python3.6/site-packages/pandas/core/frame.py:6201: FutureWarning:
+
+Sorting because non-concatenation axis is not aligned. A future version
+of pandas will change to not sort by default.
+
+To accept the future behavior, pass 'sort=True'.
+
+To retain the current behavior and silence the warning, pass sort=False
+
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}32}]:} \PY{n}{healthCanShp}\PY{o}{.}\PY{n}{name\PYZus{}3}\PY{p}{[}\PY{n}{healthCanShp}\PY{o}{.}\PY{n}{geo\PYZus{}idx} \PY{o}{==} \PY{l+m+mi}{3367}\PY{p}{]} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Montréal}\PY{l+s+s1}{\PYZsq{}} \PY{c+c1}{\PYZsh{} Montreal suburb (location same as Montreal)}
+         \PY{n}{healthCanShp}\PY{o}{.}\PY{n}{geo\PYZus{}idx}\PY{p}{[}\PY{n}{healthCanShp}\PY{o}{.}\PY{n}{geo\PYZus{}idx} \PY{o}{==} \PY{l+m+mi}{3367}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{3368}      \PY{c+c1}{\PYZsh{} Actual Montreal id}
+         
+           
+         \PY{n}{provinces} \PY{o}{=} \PY{n}{canadaShp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+         \PY{n}{hRegions} \PY{o}{=} \PY{n}{healthShp}\PY{o}{.}\PY{n}{HR\PYZus{}UID}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+/home/benmo/intelpython3/lib/python3.6/site-packages/ipykernel\_launcher.py:2: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html\#indexing-view-versus-copy
+
+/home/benmo/intelpython3/lib/python3.6/site-packages/ipykernel\_launcher.py:3: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html\#indexing-view-versus-copy
+
+
+    \end{Verbatim}
+
+    \hypertarget{run-calculations}{%
+\section{Run Calculations}\label{run-calculations}}
+
+    \hypertarget{create-data-for-analysis-in-stata}{%
+\subsection{Create Data for Analysis in
+Stata}\label{create-data-for-analysis-in-stata}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:}   
+        \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{p}{(}\PY{n}{varH}\PY{p}{,} \PY{n}{varI}\PY{p}{)} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n+nb}{zip}\PY{p}{(}\PY{n}{healthVars}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{incDistVars}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+        
+            \PY{k}{for} \PY{n}{j}\PY{p}{,} \PY{n}{hType} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{healthVars}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hrprof}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{:}  \PY{c+c1}{\PYZsh{}start ay number 5!!!!!!!}
+        
+                \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}HEALTH DATA\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZdq{}\PYZdq{}\PYZdq{}}
+        
+                \PY{n}{healthx} \PY{o}{=} \PY{n}{get\PYZus{}Healthx}\PY{p}{(}\PY{n}{hRegions}\PY{p}{,}\PY{n}{spark}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{)} \PY{c+c1}{\PYZsh{} get CCHS data for specific health variable (j) \PYZam{} age (i)}
+        
+                \PY{n}{healthData} \PY{o}{=} \PY{n}{healthShp}\PY{o}{.}\PY{n}{merge}\PY{p}{(}\PY{n}{healthx}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vector}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{coordinate}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{n}{how} \PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{left}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{left\PYZus{}on}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HR\PYZus{}UID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                                                                     \PY{n}{right\PYZus{}on}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geographicalclassification}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{c+c1}{\PYZsh{}merge w/ geographical data}
+                \PY{n}{healthData}\PY{o}{.}\PY{n}{value} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}numeric}\PY{p}{(}\PY{n}{healthData}\PY{o}{.}\PY{n}{value}\PY{p}{,}\PY{n}{errors}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{coerce}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        
+                
+                \PY{c+c1}{\PYZsh{}===================\PYZgt{} only need to calculate income distributions for each age range (ie. j = 0) ===========\PYZgt{}}
+                \PY{k}{if} \PY{n}{j}\PY{o}{==}\PY{l+m+mi}{0}\PY{p}{:}
+        
+                    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}INCOME DATA\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZdq{}\PYZdq{}\PYZdq{}}
+        
+                    \PY{n}{incDistx} \PY{o}{=} \PY{n}{get\PYZus{}incDistx}\PY{p}{(}\PY{n}{provinces}\PY{p}{,}\PY{n}{spark}\PY{p}{,} \PY{n}{i}\PY{p}{,}\PY{n}{j}\PY{p}{)} \PY{c+c1}{\PYZsh{} get age/sex specific income distribution data}
+                    \PY{n}{cities} \PY{o}{=} \PY{n}{incDistx}\PY{o}{.}\PY{n}{geo}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}                \PY{c+c1}{\PYZsh{} get list of cities incl. in income data}
+                    
+                    \PY{n}{cities} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{data}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{cities}\PY{p}{,} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{closestIndex}\PY{p}{(}\PY{n}{canadaShp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name\PYZus{}3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{p}{,} \PY{n}{cities}\PY{p}{)}\PY{p}{)}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{T}\PY{p}{,}
+                                \PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}         \PY{c+c1}{\PYZsh{} get geo\PYZus{}id of cities in income data}
+        
+                    \PY{n}{incDistx} \PY{o}{=} \PY{n}{incDistx}\PY{o}{.}\PY{n}{merge}\PY{p}{(}\PY{n}{cities}\PY{p}{,} \PY{n}{how}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{left}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{on}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{c+c1}{\PYZsh{} data now includes geo\PYZus{}id for merging}
+        
+        
+        
+                    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}FORMAT DATA\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZdq{}\PYZdq{}\PYZdq{}}
+        
+                    \PY{n}{temp} \PY{o}{=} \PY{n}{incDistx}
+                    \PY{n}{temp}\PY{o}{.}\PY{n}{value} \PY{o}{=} \PY{n}{temp}\PY{o}{.}\PY{n}{value}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[\PYZca{}0\PYZhy{}9]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}numeric}\PY{p}{)} \PY{c+c1}{\PYZsh{} remove non\PYZhy{}numeric from income}
+        
+                    
+                    
+                    \PY{c+c1}{\PYZsh{}================\PYZgt{} the following code re\PYZhy{}shapes the data and creates a column for each income bin =====\PYZgt{}}
+                    \PY{n}{incTable} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{pivot\PYZus{}table}\PY{p}{(}\PY{n}{temp}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ref\PYZus{}date}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{inc}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{,} 
+                                        \PY{n}{values}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ref\PYZus{}date}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{inc}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{n}{aggfunc}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{)}
+                    
+                    \PY{k}{try}\PY{p}{:}
+                        \PY{n}{incTable}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{5\PYZhy{}year percent change of median income}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                                               \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Median total income (dollars)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)} \PY{c+c1}{\PYZsh{} delete unused cols if they exist}
+                    \PY{k}{except}\PY{p}{:}
+                        \PY{k}{pass}
+                    
+                    \PY{n}{renamecol} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[\PYZca{}0\PYZhy{}9]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{x}\PY{p}{)} \PY{c+c1}{\PYZsh{} define func. to rename income bins to the upper bin range}
+                    
+                    \PY{n}{incTable} \PY{o}{=} \PY{n}{incTable}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{n+nb}{dict}\PY{p}{(}\PY{n+nb}{zip}\PY{p}{(}\PY{n}{incTable}\PY{o}{.}\PY{n}{columns}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{,} 
+                                                                \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{renamecol}\PY{p}{,} \PY{n}{incTable}\PY{o}{.}\PY{n}{columns}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} rename cols}
+        
+                    \PY{c+c1}{\PYZsh{}===============\PYZgt{} The following code converts data from total persons making over \PYZdl{}x to a \PYZpc{} of population====\PYZgt{}}
+                    \PY{n}{incTable}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{200000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{incTable}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{100000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{/}\PY{n}{x}\PY{p}{[}\PY{n}{incTable}\PY{o}{.}\PY{n}{columns}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+                    \PY{n}{incTable}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{100000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{incTable}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{75000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{100000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{/}\PY{n}{x}\PY{p}{[}\PY{n}{incTable}\PY{o}{.}\PY{n}{columns}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)} 
+                    \PY{n}{incTable}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{75000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{incTable}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{50000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{75000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{/}\PY{n}{x}\PY{p}{[}\PY{n}{incTable}\PY{o}{.}\PY{n}{columns}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+                    \PY{n}{incTable}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{50000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{incTable}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{35000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{50000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{/}\PY{n}{x}\PY{p}{[}\PY{n}{incTable}\PY{o}{.}\PY{n}{columns}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}  
+                    \PY{n}{incTable}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{35000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{incTable}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{20000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{35000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{/}\PY{n}{x}\PY{p}{[}\PY{n}{incTable}\PY{o}{.}\PY{n}{columns}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)} 
+                    \PY{n}{incTable}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{20000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{incTable}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{10000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{20000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{/}\PY{n}{x}\PY{p}{[}\PY{n}{incTable}\PY{o}{.}\PY{n}{columns}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)} 
+                    \PY{n}{incTable}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{10000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{incTable}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{n}{incTable}\PY{o}{.}\PY{n}{columns}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{10000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{/}\PY{n}{x}\PY{p}{[}\PY{n}{incTable}\PY{o}{.}\PY{n}{columns}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+        
+        
+        
+                    \PY{n}{incTable}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{200000}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Over 100000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}                \PY{c+c1}{\PYZsh{} rename cols}
+                    \PY{n}{incTable}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{5000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{15000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{25000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{150000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{250000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}  \PY{c+c1}{\PYZsh{} drop unused cols}
+        
+                    
+                    \PY{k}{for} \PY{n}{col} \PY{o+ow}{in} \PY{n}{incTable}\PY{o}{.}\PY{n}{columns}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                        \PY{n}{incTable}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{p}{[}\PY{n}{incTable}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{.}\PY{n}{isna}\PY{p}{(}\PY{p}{)} \PY{o}{==} \PY{k+kc}{True}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{0}     \PY{c+c1}{\PYZsh{} na values have 0\PYZpc{} of population within bin}
+                        
+                    \PY{n}{incTable}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{totalpercent}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{incTable}\PY{o}{.}\PY{n}{apply}\PY{p}{(}
+                            \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n+nb}{sum}\PY{p}{(}\PY{p}{[}\PY{n+nb}{float}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{n}{xi}\PY{p}{]}\PY{p}{)} \PY{k}{for} \PY{n}{xi} \PY{o+ow}{in} \PY{n}{incTable}\PY{o}{.}\PY{n}{columns}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)} \PY{c+c1}{\PYZsh{} used to check if \PYZpc{}\PYZsq{}s add up to 1}
+        
+                    \PY{c+c1}{\PYZsh{}=============\PYZgt{} send data to R and return smoothed income distribution ==========\PYZgt{} }
+                    \PY{n}{incTable}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dist}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{incTable}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{get\PYZus{}incDist}\PY{p}{(}\PY{p}{[}\PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{10000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+                                                                             \PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{20000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{35000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+                                                                             \PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{50000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{75000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+                                                                             \PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{100000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Over 100000}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+        
+                    \PY{c+c1}{\PYZsh{}===========\PYZgt{} creates data for more refined income bins generated by the smoothed distribution ===\PYZgt{}}
+                    \PY{c+c1}{\PYZsh{}===============\PYZgt{} calls R to calculate inequality metrics given the income distributions =========\PYZgt{}}
+                    \PY{n}{incTable}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tempdist}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{incTable}\PY{o}{.}\PY{n}{dist}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{o}{.}\PY{n}{rvs}\PY{p}{(}\PY{n}{size}\PY{o}{=}\PY{l+m+mi}{30000}\PY{p}{)}\PY{p}{)}
+                    \PY{n}{incTable}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{gini}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{incTable}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{get\PYZus{}gini}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tempdist}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+                    \PY{n}{incTable}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{median}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{incTable}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dist}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{median}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+                    \PY{n}{incTable}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{atkLow}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{incTable}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{get\PYZus{}atkinson}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tempdist}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{eps}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+                    \PY{n}{incTable}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{atkHigh}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{incTable}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{get\PYZus{}atkinson}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tempdist}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{eps}\PY{o}{=}\PY{l+m+mf}{1.5}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+                    \PY{n}{incTable} \PY{o}{=} \PY{n}{incTable}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tempdist}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        
+                    \PY{c+c1}{\PYZsh{}============\PYZgt{} the only variables which are needed later are retained in the \PYZsq{}temp\PYZsq{} dataframe ======\PYZgt{}}
+                    \PY{n}{temp} \PY{o}{=} \PY{n}{incTable}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Total persons with income}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{gini}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{atkLow}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                                     \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{atkHigh}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{median}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}
+                                     \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}numeric}\PY{p}{)}\PY{o}{.}\PY{n}{set\PYZus{}index}\PY{p}{(}
+                                             \PY{n}{incTable}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{get\PYZus{}level\PYZus{}values}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}\PY{p}{)}
+                    
+                    
+                    
+                    \PY{c+c1}{\PYZsh{}===========\PYZgt{} reshape dataframe (ie. move sex,year from index to columns) ===\PYZgt{}}
+                    \PY{n}{temp}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{set\PYZus{}names}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+                    \PY{n}{temp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{incTable}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{get\PYZus{}level\PYZus{}values}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+                    \PY{n}{temp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{incTable}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{get\PYZus{}level\PYZus{}values}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+                    \PY{n}{temp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{incTable}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{get\PYZus{}level\PYZus{}values}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{str}\PY{p}{)}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+        
+                    \PY{n}{tempInc} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{pivot\PYZus{}table}\PY{p}{(}\PY{n}{temp}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                                                       \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Total persons with income}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{gini}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                                                       \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{atkLow}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{atkHigh}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{median}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{,} 
+                                                        \PY{n}{values}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Total persons with income}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{gini}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                                                                \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{atkLow}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{atkHigh}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{median}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                                                                \PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{n}{aggfunc}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{)}
+        
+                    \PY{c+c1}{\PYZsh{} note: this makes it so that the only index is geography, such that all the data can easily be joined}
+                    \PY{c+c1}{\PYZsh{} on the geo\PYZus{}id and saved as a shapefile for geographical visualization/processing.}
+        
+                
+                \PY{c+c1}{\PYZsh{}====================\PYZgt{} Reshape health data for merging with income data =============\PYZgt{}}
+                \PY{n}{healthData}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ref\PYZus{}date}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sex}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{,} \PY{n}{inplace} \PY{o}{=} \PY{k+kc}{True}\PY{p}{)}
+        
+                \PY{n}{healthData}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hrprof}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{unit}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{n}{healthData}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                       \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hrprof}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{unit}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{str}\PY{p}{)}
+        
+                \PY{n}{healthData}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{n}{healthData}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}numeric}\PY{p}{)}
+        
+                \PY{n}{tempHealth} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{pivot\PYZus{}table}\PY{p}{(}\PY{n}{healthData}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HR\PYZus{}UID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                                            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{,} 
+                                                    \PY{n}{values}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HR\PYZus{}UID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+                                                            \PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{n}{aggfunc}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{)}
+        
+        
+                \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}SHAPEFILES!!!!!!!!!!\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZdq{}\PYZdq{}\PYZdq{}}
+                \PY{n}{ineqShapeCities} \PY{o}{=} \PY{n}{healthCanShp}\PY{o}{.}\PY{n}{merge}\PY{p}{(}\PY{n}{tempInc}\PY{p}{,} \PY{n}{how}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{inner}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{left\PYZus{}on}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo\PYZus{}idx}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{right\PYZus{}index}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+                \PY{n}{healthShapeRegions} \PY{o}{=} \PY{n}{healthCanShp}\PY{o}{.}\PY{n}{merge}\PY{p}{(}\PY{n}{tempHealth}\PY{p}{,} \PY{n}{left\PYZus{}on}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HR\PYZus{}UID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                                                      \PY{n}{right\PYZus{}index}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{o}{.}\PY{n}{merge}\PY{p}{(}
+                                                              \PY{n}{tempInc}\PY{p}{,} \PY{n}{left\PYZus{}on}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo\PYZus{}idx}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{right\PYZus{}index}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+        
+        
+        
+        
+                \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}CREATE DATA TABLE\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZdq{}\PYZdq{}\PYZdq{}}
+        
+                \PY{n}{regionsData} \PY{o}{=} \PY{n}{healthCanShp}\PY{o}{.}\PY{n}{merge}\PY{p}{(}\PY{n}{temp}\PY{p}{,} \PY{n}{how}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{inner}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{left\PYZus{}on}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo\PYZus{}idx}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{right\PYZus{}index}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+                \PY{n}{regionsData}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hr\PYZus{}uid}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HR\PYZus{}UID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{eng\PYZus{}label}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ENG\PYZus{}LABEL}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+                \PY{n}{regionsData}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HR\PYZus{}UID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ENG\PYZus{}LABEL}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name\PYZus{}3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo\PYZus{}idx}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{n}{regionsData}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HR\PYZus{}UID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ENG\PYZus{}LABEL}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name\PYZus{}3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo\PYZus{}idx}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{str}\PY{p}{)}
+                \PY{n}{healthData}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ref\PYZus{}date}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{age}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sex}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{,} \PY{n}{inplace} \PY{o}{=} \PY{k+kc}{True}\PY{p}{)}
+        
+                \PY{n}{healthData}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hrprof}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{unit}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{n}{healthData}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                       \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hrprof}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{unit}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{str}\PY{p}{)}
+                \PY{n}{healthData}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{n}{healthData}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}numeric}\PY{p}{)}
+        
+                \PY{n}{regionsData} \PY{o}{=} \PY{n}{regionsData}\PY{o}{.}\PY{n}{merge}\PY{p}{(}\PY{n}{healthData}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HR\PYZus{}UID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                       \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hrprof}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{unit}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{how}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{left}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{on}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HR\PYZus{}UID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+        
+        
+        
+                \PY{n}{diri} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/home/benmo/Data/GeoData/Inequality/}\PY{l+s+si}{\PYZob{}age\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{age}\PY{o}{=}\PY{n}{varI}\PY{p}{)}
+                \PY{n}{dirj} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/}\PY{l+s+si}{\PYZob{}htype\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{htype}\PY{o}{=}\PY{n}{hType}\PY{p}{)}
+        
+                \PY{k}{if} \PY{o+ow}{not} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{exists}\PY{p}{(}\PY{n}{diri}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{35}\PY{p}{]} \PY{o}{+} \PY{n}{dirj}\PY{p}{)}\PY{p}{:}
+                    \PY{n}{os}\PY{o}{.}\PY{n}{makedirs}\PY{p}{(}\PY{n}{diri}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{35}\PY{p}{]} \PY{o}{+} \PY{n}{dirj}\PY{p}{)}
+        
+                \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}SEND TO STATA \PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZdq{}\PYZdq{}\PYZdq{}}
+                \PY{k}{if} \PY{n}{stata} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{:}
+                    \PY{n}{regionsData}\PY{p}{[}\PY{n}{varI}\PY{p}{]} \PY{o}{=} \PY{n}{varI}
+                    \PY{n}{regionsData}\PY{p}{[}\PY{n}{hType}\PY{p}{]} \PY{o}{=} \PY{n}{hType}
+                    \PY{n}{regionsData}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HR\PYZus{}UID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ENG\PYZus{}LABEL}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name\PYZus{}3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo\PYZus{}idx}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{gini}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{atkLow}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{atkHigh}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{median}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hrprof}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                                 \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Total persons with income}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{unit}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+} \PY{p}{[}
+                                         \PY{n}{varI}\PY{p}{,} \PY{n}{hType}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{str}\PY{p}{)}\PY{o}{.}\PY{n}{to\PYZus{}stata}\PY{p}{(}\PY{n}{diri}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{35}\PY{p}{]} \PY{o}{+} \PY{n}{dirj} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/stataHealth.dta}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        
+        
+                \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}SEND TO PICKLE \PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZdq{}\PYZdq{}\PYZdq{}}
+        
+                \PY{n}{regionsData}\PY{p}{[}\PY{n}{varI}\PY{p}{]} \PY{o}{=} \PY{n}{varI}
+                \PY{n}{regionsData}\PY{p}{[}\PY{n}{hType}\PY{p}{]} \PY{o}{=} \PY{n}{hType}
+                \PY{n}{regionsData}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HR\PYZus{}UID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ENG\PYZus{}LABEL}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name\PYZus{}3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{geo\PYZus{}idx}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{gini}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{atkLow}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{atkHigh}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{median}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hrprof}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                             \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Total persons with income}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{unit}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+} \PY{p}{[}
+                                     \PY{n}{varI}\PY{p}{,} \PY{n}{hType}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{to\PYZus{}pickle}\PY{p}{(}\PY{n}{diri}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{35}\PY{p}{]} \PY{o}{+} \PY{n}{dirj} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/pyHealth.pkl}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                \PY{k}{if} \PY{n}{j} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+                    \PY{n}{incTable}\PY{o}{.}\PY{n}{to\PYZus{}pickle}\PY{p}{(}\PY{n}{diri}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{35}\PY{p}{]} \PY{o}{+} \PY{n}{dirj} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/pyIncomeTable.pkl}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        
+                \PY{n}{ineqShapeCities}\PY{o}{.}\PY{n}{to\PYZus{}pickle}\PY{p}{(}\PY{n}{diri}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{35}\PY{p}{]} \PY{o}{+} \PY{n}{dirj} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/pyShpCities.pkl}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} 
+                \PY{n}{healthShapeRegions}\PY{o}{.}\PY{n}{to\PYZus{}pickle}\PY{p}{(}\PY{n}{diri}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{35}\PY{p}{]} \PY{o}{+} \PY{n}{dirj} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/pyShpRegions.pkl}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        
+        
+                \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}SAVE SHAPEFILES TO DISK\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZus{}\PYZdq{}\PYZdq{}\PYZdq{}}
+        
+                \PY{k}{if} \PY{n}{shape} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{:}
+                    \PY{n}{ineqShapeCities}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{tuple2str}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+                    \PY{n}{healthShapeRegions}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{tuple2str}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+        
+                    \PY{n}{ineqShapeCities}\PY{o}{.}\PY{n}{to\PYZus{}file}\PY{p}{(}\PY{n}{diri}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{35}\PY{p}{]} \PY{o}{+} \PY{n}{dirj} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/ineqCity.shp}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{driver}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ESRI Shapefile}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+                    \PY{n}{healthShapeRegions}\PY{o}{.}\PY{n}{to\PYZus{}file}\PY{p}{(}\PY{n}{diri}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{35}\PY{p}{]} \PY{o}{+} \PY{n}{dirj} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/ineqRegion.shp}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{driver}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ESRI Shapefile}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        
+        \PY{n}{spark}\PY{o}{.}\PY{n}{stop}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}30}]:} 
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}9}]:} \PY{n}{bob} \PY{o}{=} \PY{n}{spark}\PY{o}{.}\PY{n}{read}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{option}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{header}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+                                       \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{true}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{option}\PY{p}{(}
+            \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{delimiter}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{;}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/home/benmo/Apps/SDMX\PYZus{}Converter\PYZus{}Platform\PYZhy{}Independent\PYZus{}v.3.1.7\PYZus{}2014.06.30/Converter\PYZus{}Data/Output Files/out.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \(\alpha\)
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}5}]:} \PY{n}{test} \PY{o}{=} \PY{n}{spark}\PY{o}{.}\PY{n}{read}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{jdbc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{option}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{url}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+                                       \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{jdbc:sqlite:/home/benmo/Data/Databases/health.db}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{option}\PY{p}{(}
+                                               \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbtable}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hRegion\PYZus{}details}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}10}]:} \PY{n+nb}{vars} \PY{o}{=} \PY{n}{test}\PY{o}{.}\PY{n}{select}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Ref\PYZus{}Date}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{distinct}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{toPandas}\PY{p}{(}\PY{p}{)}
+         \PY{n+nb}{vars}\PY{o}{.}\PY{n}{Ref\PYZus{}Date}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}10}]:} ['2006', '2011', '2001']
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}8}]:} \PY{n+nb}{vars} \PY{o}{=} \PY{n}{test}\PY{o}{.}\PY{n}{select}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CENSUSPROF}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{filter}\PY{p}{(}\PY{n}{test}\PY{o}{.}\PY{n}{CENSUSPROF}\PY{o}{.}\PY{n}{contains}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{emp}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{distinct}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{toPandas}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb}{vars}\PY{o}{.}\PY{n}{CENSUSPROF}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}8}]:} ['Employment rate, 25-54 years (percent)',
+         'Long-term unemployed',
+         'Long-term unemployment rate, labour force aged 15 and over (percent)',
+         'Unemployment rate 15 years and over (percent)',
+         'Long-term unemployment rate, labour force aged 15 and over',
+         'Long-term unemployed (number)',
+         'Employed persons aged 25 to 54 years']
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}15}]:} \PY{n}{bob} \PY{o}{=} \PY{n}{spark}\PY{o}{.}\PY{n}{read}\PY{o}{.}\PY{n}{json}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/home/benmo/Downloads/SDMXML\PYZhy{}Test/test.json}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{multiLine}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}16}]:} \PY{n}{bob}\PY{o}{.}\PY{n}{schema}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}16}]:} StructType(List(StructField(\_corrupt\_record,StringType,true)))
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}16}]:} \PY{n}{df} \PY{o}{=} \PY{n}{spark}\PY{o}{.}\PY{n}{read}\PY{o}{.}\PY{n}{json}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/home/benmo/Downloads/SDMXML\PYZhy{}Test/test.json}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}12}]:} \PY{n}{bob}\PY{o}{.}\PY{n}{columns}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}12}]:} ['01', '11', '12', '13', '14', '15', '2011', '16595035', '\_c8']
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}35}]:} \PY{n}{bob}\PY{o}{.}\PY{n}{select}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{13}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{distinct}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{toPandas}\PY{p}{(}\PY{p}{)} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1}\PY{l+s+s1}{\PYZsq{}}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}35}]:}       13
+         0  False
+         1  False
+         2  False
+         3  False
+         4  False
+         5  False
+         6   True
+         7  False
+         8  False
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}11}]:} \PY{n}{db} \PY{o}{=} \PY{n}{db}\PY{o}{.}\PY{n}{connect}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/home/benmo/Data/Databases/health.db}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}17}]:} \PY{n}{bob} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}sql\PYZus{}query}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SELECT * FROM hUnemp}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{con}\PY{o}{=}\PY{n}{db}\PY{p}{)}
+         \PY{n}{bob2} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}sql\PYZus{}query}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SELECT * FROM hUnemp2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{con}\PY{o}{=}\PY{n}{db}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}18}]:} \PY{n}{jim} \PY{o}{=} \PY{n}{bob}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{bob2}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}20}]:} \PY{n}{jim}\PY{o}{.}\PY{n}{drop\PYZus{}duplicates}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Ref\PYZus{}Date}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GEO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Geographicalclassification}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LABFORCE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{keep}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{last}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}24}]:} \PY{n}{jim}\PY{o}{.}\PY{n}{to\PYZus{}sql}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{unemp}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{con}\PY{o}{=}\PY{n}{db}\PY{p}{,} \PY{n}{if\PYZus{}exists}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{append}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}
